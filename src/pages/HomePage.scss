@@ -1,0 +1,121 @@
+@import "../styles/variables";
+
+.home-page {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: $spacing-sm;
+}
+
+.hero {
+  background: linear-gradient(135deg, $color-primary 0%, $color-secondary 100%);
+  padding: 3rem $spacing-sm;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 3rem;
+
+  h2 {
+    margin: 0 0 $spacing-sm 0;
+    font-size: 2.5rem;
+    color: #000;
+  }
+
+  p {
+    margin: 0;
+    font-size: 1.2rem;
+    color: rgba(0, 0, 0, 0.7);
+  }
+}
+
+.products-section {
+  h2 {
+    margin-bottom: $spacing-sm;
+    font-size: 2rem;
+    color: #000;
+  }
+}
+
+.products-container {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: $spacing-md;
+}
+
+.products-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.section-title {
+  margin: 0 0 $spacing-sm 0;
+  padding-bottom: $spacing-sm;
+  border-bottom: 3px solid $color-primary;
+}
+
+.no-products {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  text-align: center;
+
+  p {
+    font-size: 1.2rem;
+    color: $color-text-light;
+  }
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: $spacing-sm;
+}
+
+// Responsivo - Tablet
+@media (max-width: $breakpoint-tablet) {
+  .products-container {
+    grid-template-columns: 1fr;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+
+  .hero h2 {
+    font-size: 2rem;
+  }
+}
+
+// Responsivo - Mobile
+@media (max-width: $breakpoint-mobile) {
+  .home-page {
+    padding: $spacing-xs;
+  }
+
+  .products-container {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    padding: 2rem $spacing-xs;
+    margin-bottom: 2rem;
+
+    h2 {
+      font-size: 1.5rem;
+    }
+
+    p {
+      font-size: 1rem;
+    }
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: $spacing-xs;
+  }
+
+  .section-title {
+    font-size: 1.3rem;
+  }
+}
