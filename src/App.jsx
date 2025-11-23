@@ -6,6 +6,7 @@ import { OrderProvider } from './context/OrderProvider'
 import { FilterProvider } from './context/FilterProvider'
 import { WishlistProvider } from './context/WishlistProvider'
 import { ReviewProvider } from './context/ReviewProvider'
+import { CouponProvider } from './context/CouponProvider'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import NotificationContainer from './components/NotificationContainer'
@@ -45,20 +46,22 @@ function App() {
         <OrderProvider>
           <FilterProvider>
             <ReviewProvider>
-              <NotificationProvider>
-                <div className="app-layout">
-                  <Header />
-                  <main className="app-main">
-                    <NotificationContainer />
-                    {currentPage === 'home' && <HomePage />}
-                    {currentPage === 'cart' && <CartPage />}
-                    {currentPage === 'checkout' && <CheckoutPage />}
-                    {currentPage === 'orders' && <OrderHistoryPage />}
-                    {currentPage === 'wishlist' && <WishlistPage />}
-                  </main>
-                  <Footer />
-                </div>
-              </NotificationProvider>
+              <CouponProvider>
+                <NotificationProvider>
+                  <div className="app-layout">
+                    <Header />
+                    <main className="app-main">
+                      <NotificationContainer />
+                      {currentPage === 'home' && <HomePage />}
+                      {currentPage === 'cart' && <CartPage />}
+                      {currentPage === 'checkout' && <CheckoutPage />}
+                      {currentPage === 'orders' && <OrderHistoryPage />}
+                      {currentPage === 'wishlist' && <WishlistPage />}
+                    </main>
+                    <Footer />
+                  </div>
+                </NotificationProvider>
+              </CouponProvider>
             </ReviewProvider>
           </FilterProvider>
         </OrderProvider>

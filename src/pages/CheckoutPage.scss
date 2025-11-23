@@ -228,6 +228,11 @@
   justify-content: space-between;
   font-size: 0.95rem;
 
+  &.discount-row {
+    color: $color-secondary;
+    font-weight: bold;
+  }
+
   &.final {
     padding-top: $spacing-sm;
     border-top: 2px solid $color-primary;

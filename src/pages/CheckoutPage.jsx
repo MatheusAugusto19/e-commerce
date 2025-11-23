@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import { useCart } from "../context/useCart";
 import { useNotification } from "../context/useNotification";
 import { useOrder } from "../context/useOrder";
+import { useCoupon } from "../context/useCoupon";
+import CouponSection from "../components/CouponSection";
 import "./CheckoutPage.scss";
 
 export default function CheckoutPage() {
   const { cartItems, getTotal, clearCart } = useCart();
   const { addNotification } = useNotification();
   const { addOrder } = useOrder();
+  const { appliedCoupon, calculateDiscount } = useCoupon();
   const [step, setStep] = useState(1); // 1: Endereço, 2: Pagamento, 3: Confirmação
   const [formData, setFormData] = useState({
     name: "",
@@ -69,10 +72,18 @@ export default function CheckoutPage() {
     // Gerar número de pedido
     const newOrderNumber = "PED-" + Date.now();
     
+    // Calcular total com desconto
+    const subtotal = getTotal();
+    const discount = calculateDiscount();
+    const finalTotal = subtotal - discount;
+    
     // Salvar pedido no OrderProvider
     addOrder({
       items: cartItems,
-      total: getTotal(),
+      total: finalTotal,
+      subtotal: subtotal,
+      discount: discount,
+      couponCode: appliedCoupon ? appliedCoupon.code : null,
       shippingInfo: formData,
       paymentMethod: paymentData.cardName,
     });
@@ -293,6 +304,8 @@ export default function CheckoutPage() {
                 </div>
               </form>
 
+              <CouponSection />
+
               <div className="button-group">
                 <button onClick={() => setStep(1)} className="back-btn">
                   ← Voltar
@@ -329,9 +342,15 @@ export default function CheckoutPage() {
                 <span>Frete:</span>
                 <span>Grátis</span>
               </div>
+              {appliedCoupon && calculateDiscount() > 0 && (
+                <div className="total-row discount-row">
+                  <span>Desconto ({appliedCoupon.code}):</span>
+                  <span>-R$ {calculateDiscount().toFixed(2)}</span>
+                </div>
+              )}
               <div className="total-row final">
                 <span>Total:</span>
-                <span>R$ {getTotal().toFixed(2)}</span>
+                <span>R$ {(getTotal() - calculateDiscount()).toFixed(2)}</span>
               </div>
             </div>
           </div>
