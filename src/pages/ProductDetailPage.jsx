@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { useCart } from "../context/useCart";
+import { useNotification } from "../context/useNotification";
+import ReviewSection from "../components/ReviewSection";
 import "./ProductDetailPage.scss";
 
 export default function ProductDetailPage({ productId, onClose }) {
   const { addToCart } = useCart();
+  const { addNotification } = useNotification();
   const [quantity, setQuantity] = useState(1);
 
   // Dados de exemplo - depois você vai buscar do backend
@@ -301,6 +304,9 @@ export default function ProductDetailPage({ productId, onClose }) {
                 </tbody>
               </table>
             </div>
+
+            {/* Reviews */}
+            <ReviewSection productId={productId} />
           </div>
         </div>
       </div>

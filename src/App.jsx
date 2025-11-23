@@ -5,6 +5,7 @@ import { NotificationProvider } from './context/NotificationProvider'
 import { OrderProvider } from './context/OrderProvider'
 import { FilterProvider } from './context/FilterProvider'
 import { WishlistProvider } from './context/WishlistProvider'
+import { ReviewProvider } from './context/ReviewProvider'
 import Header from './components/Header'
 import NotificationContainer from './components/NotificationContainer'
 import HomePage from './pages/HomePage'
@@ -42,20 +43,20 @@ function App() {
       <WishlistProvider>
         <OrderProvider>
           <FilterProvider>
-            <NotificationProvider>
-              <Header />
-              <NotificationContainer />
-              {currentPage === 'home' && <HomePage />}
-              {currentPage === 'cart' && <CartPage />}
-              {currentPage === 'checkout' && <CheckoutPage />}
-              {currentPage === 'orders' && <OrderHistoryPage />}
-              {currentPage === 'wishlist' && <WishlistPage />}
-            </NotificationProvider>
+            <ReviewProvider>
+              <NotificationProvider>
+                <Header />
+                <NotificationContainer />
+                {currentPage === 'home' && <HomePage />}
+                {currentPage === 'cart' && <CartPage />}
+                {currentPage === 'checkout' && <CheckoutPage />}
+                {currentPage === 'orders' && <OrderHistoryPage />}
+                {currentPage === 'wishlist' && <WishlistPage />}
+              </NotificationProvider>
+            </ReviewProvider>
           </FilterProvider>
         </OrderProvider>
       </WishlistProvider>
-    </CartProvider>
-  )
     </CartProvider>
   )
 }
