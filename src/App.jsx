@@ -7,6 +7,7 @@ import { FilterProvider } from './context/FilterProvider'
 import { WishlistProvider } from './context/WishlistProvider'
 import { ReviewProvider } from './context/ReviewProvider'
 import Header from './components/Header'
+import Footer from './components/Footer'
 import NotificationContainer from './components/NotificationContainer'
 import HomePage from './pages/HomePage'
 import CartPage from './pages/CartPage'
@@ -45,13 +46,18 @@ function App() {
           <FilterProvider>
             <ReviewProvider>
               <NotificationProvider>
-                <Header />
-                <NotificationContainer />
-                {currentPage === 'home' && <HomePage />}
-                {currentPage === 'cart' && <CartPage />}
-                {currentPage === 'checkout' && <CheckoutPage />}
-                {currentPage === 'orders' && <OrderHistoryPage />}
-                {currentPage === 'wishlist' && <WishlistPage />}
+                <div className="app-layout">
+                  <Header />
+                  <main className="app-main">
+                    <NotificationContainer />
+                    {currentPage === 'home' && <HomePage />}
+                    {currentPage === 'cart' && <CartPage />}
+                    {currentPage === 'checkout' && <CheckoutPage />}
+                    {currentPage === 'orders' && <OrderHistoryPage />}
+                    {currentPage === 'wishlist' && <WishlistPage />}
+                  </main>
+                  <Footer />
+                </div>
               </NotificationProvider>
             </ReviewProvider>
           </FilterProvider>
