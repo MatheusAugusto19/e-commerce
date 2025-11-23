@@ -57,25 +57,6 @@
 .search-bar {
   flex: 1;
   max-width: 400px;
-
-  input {
-    width: 100%;
-    padding: $spacing-xs $spacing-sm;
-    border: 2px solid $color-secondary;
-    border-radius: 4px;
-    font-size: 1rem;
-    outline: none;
-    transition: all 0.3s ease;
-
-    &:focus {
-      border-color: #000;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-    }
-
-    &::placeholder {
-      color: rgba(0, 0, 0, 0.5);
-    }
-  }
 }
 
 .header-actions {
@@ -108,7 +89,7 @@
   font-size: 1.5rem;
 }
 
-.wishlist-count {
+.cart-count {
   background-color: $color-secondary;
   color: #000;
   padding: 2px 6px;
@@ -120,6 +101,62 @@
   position: absolute;
   top: -8px;
   right: -8px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: 0 $spacing-sm;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.user-greeting {
+  color: #000;
+  font-weight: 600;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.logout-btn {
+  background: transparent;
+  border: none;
+  color: #000;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: opacity 0.2s ease;
+  padding: $spacing-xs;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &:active {
+    opacity: 0.5;
+  }
+}
+
+.login-btn {
+  background: transparent;
+  border: 2px solid #000;
+  color: #000;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #000;
+    color: $color-primary;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
 }
 
 .orders-btn {
@@ -174,5 +211,19 @@
 
   .logo h1 {
     font-size: 1.3rem;
+  }
+
+  .user-info {
+    flex-wrap: wrap;
+    order: 5;
+    flex-basis: 100%;
+    margin-top: $spacing-xs;
+  }
+
+  .login-btn {
+    order: 5;
+    flex-basis: 100%;
+    margin-top: $spacing-xs;
+    width: 100%;
   }
 }

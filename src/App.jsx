@@ -9,6 +9,8 @@ import { ReviewProvider } from './context/ReviewProvider'
 import { CouponProvider } from './context/CouponProvider'
 import { PaginationProvider } from './context/PaginationProvider'
 import { FreightProvider } from './context/FreightProvider'
+import { SearchProvider } from './context/SearchProvider'
+import AuthProvider from './context/AuthProvider'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import NotificationContainer from './components/NotificationContainer'
@@ -43,36 +45,40 @@ function App() {
   }, [])
 
   return (
-    <CartProvider>
-      <WishlistProvider>
-        <OrderProvider>
-          <FilterProvider>
-            <ReviewProvider>
-              <CouponProvider>
-                <PaginationProvider>
-                  <FreightProvider>
-                    <NotificationProvider>
-                      <div className="app-layout">
-                        <Header />
-                        <main className="app-main">
-                          <NotificationContainer />
-                          {currentPage === 'home' && <HomePage />}
-                          {currentPage === 'cart' && <CartPage />}
-                          {currentPage === 'checkout' && <CheckoutPage />}
-                          {currentPage === 'orders' && <OrderHistoryPage />}
-                          {currentPage === 'wishlist' && <WishlistPage />}
-                        </main>
-                        <Footer />
-                      </div>
-                    </NotificationProvider>
-                  </FreightProvider>
-                </PaginationProvider>
-              </CouponProvider>
-            </ReviewProvider>
-          </FilterProvider>
-        </OrderProvider>
-      </WishlistProvider>
-    </CartProvider>
+    <AuthProvider>
+      <CartProvider>
+        <WishlistProvider>
+          <OrderProvider>
+            <FilterProvider>
+              <SearchProvider>
+                <ReviewProvider>
+                  <CouponProvider>
+                    <PaginationProvider>
+                      <FreightProvider>
+                        <NotificationProvider>
+                          <div className="app-layout">
+                            <Header />
+                            <main className="app-main">
+                              <NotificationContainer />
+                              {currentPage === 'home' && <HomePage />}
+                              {currentPage === 'cart' && <CartPage />}
+                              {currentPage === 'checkout' && <CheckoutPage />}
+                              {currentPage === 'orders' && <OrderHistoryPage />}
+                              {currentPage === 'wishlist' && <WishlistPage />}
+                            </main>
+                            <Footer />
+                          </div>
+                        </NotificationProvider>
+                      </FreightProvider>
+                    </PaginationProvider>
+                  </CouponProvider>
+                </ReviewProvider>
+              </SearchProvider>
+            </FilterProvider>
+          </OrderProvider>
+        </WishlistProvider>
+      </CartProvider>
+    </AuthProvider>
   )
 }
 

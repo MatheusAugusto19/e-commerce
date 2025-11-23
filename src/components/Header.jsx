@@ -1,20 +1,16 @@
 import React, { useState } from "react";
 import { useCart } from "../context/useCart";
-import { useFilter } from "../context/useFilter";
 import { useWishlist } from "../context/useWishlist";
+import { useAuth } from "../context/useAuth";
+import SearchBar from "./SearchBar";
+import LoginRegisterModal from "./LoginRegisterModal";
 import "./Header.scss";
 
 export default function Header() {
   const { getTotalItems } = useCart();
-  const { setSearchQuery } = useFilter();
   const { getTotalWishlistItems } = useWishlist();
-  const [localSearch, setLocalSearch] = useState("");
-
-  const handleSearch = (e) => {
-    const value = e.target.value;
-    setLocalSearch(value);
-    setSearchQuery(value);
-  };
+  const { user, logout, isAuthenticated } = useAuth();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const goToCart = () => {
     window.location.hash = '#carrinho';
@@ -41,16 +37,28 @@ export default function Header() {
           </div>
         </button>
         
-        <div className="search-bar">
-          <input 
-            type="text" 
-            placeholder="Buscar produtos..." 
-            value={localSearch}
-            onChange={handleSearch}
-          />
-        </div>
+        <SearchBar />
         
         <div className="header-actions">
+          {isAuthenticated ? (
+            <>
+              <div className="user-info">
+                <span className="user-greeting">👤 {user?.name}</span>
+                <button onClick={logout} className="logout-btn" title="Sair">
+                  Sair
+                </button>
+              </div>
+            </>
+          ) : (
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="login-btn"
+              title="Entrar ou criar conta"
+            >
+              Entrar
+            </button>
+          )}
+
           <button onClick={goToWishlist} className="wishlist-btn" title="Favoritos">
             <span className="wishlist-icon">❤️</span>
             <span className="wishlist-count">{getTotalWishlistItems()}</span>
@@ -64,6 +72,8 @@ export default function Header() {
           </button>
         </div>
       </div>
+
+      <LoginRegisterModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </header>
   );
 }
