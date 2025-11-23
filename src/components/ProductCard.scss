@@ -140,8 +140,8 @@
   }
 }
 
-// Responsivo
-@media (max-width: $breakpoint-mobile) {
+// Responsivo - Tablet
+@media (max-width: $breakpoint-md) {
   .product-card {
     &:hover {
       transform: translateY(-2px);
@@ -154,9 +154,58 @@
 
   .product-name {
     font-size: 1rem;
+    min-height: 2.4em;
   }
 
   .product-price {
     font-size: 1.1rem;
+  }
+
+  .add-to-cart-btn {
+    font-size: 0.85rem;
+    padding: $spacing-xs 6px;
+  }
+}
+
+// Responsivo - Mobile
+@media (max-width: $breakpoint-xs) {
+  .product-card {
+    &:hover {
+      transform: translateY(-1px);
+    }
+  }
+
+  .product-image {
+    height: 120px;
+  }
+
+  .product-name {
+    font-size: 0.9rem;
+    min-height: 2.2em;
+    margin-bottom: 2px;
+  }
+
+  .product-description {
+    font-size: 0.75rem;
+    margin-bottom: 2px;
+  }
+
+  .product-price {
+    font-size: 0.95rem;
+  }
+
+  .add-to-cart-btn {
+    font-size: 0.75rem;
+    padding: 4px 4px;
+  }
+
+  .product-info {
+    padding: $spacing-xs;
+  }
+
+  .favorite-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 1.2rem;
   }
 }

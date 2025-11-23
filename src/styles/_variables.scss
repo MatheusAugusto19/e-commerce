@@ -16,6 +16,13 @@ $spacing-lg: 24px;
 $spacing-xl: 32px;
 
 // Breakpoints
+$breakpoint-xs: 480px;    // Extra small devices (phones)
+$breakpoint-sm: 640px;    // Small devices (large phones)
+$breakpoint-md: 768px;    // Medium devices (tablets)
+$breakpoint-lg: 1024px;   // Large devices (desktops)
+$breakpoint-xl: 1280px;   // Extra large devices (wide desktops)
+
+// Legacy breakpoints (kept for compatibility)
 $breakpoint-mobile: 768px;
 $breakpoint-tablet: 1024px;
 

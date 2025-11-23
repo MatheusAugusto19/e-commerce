@@ -197,20 +197,30 @@
   text-align: center;
 }
 
-// Responsivo - Mobile
-@media (max-width: $breakpoint-mobile) {
+// Responsivo - Tablet (768px e abaixo)
+@media (max-width: $breakpoint-md) {
+  .header {
+    padding: $spacing-xs;
+  }
+
   .header-container {
     flex-wrap: wrap;
+    gap: $spacing-xs;
   }
 
   .search-bar {
     order: 3;
     flex-basis: 100%;
     margin-top: $spacing-xs;
+    max-width: 100%;
   }
 
   .logo h1 {
     font-size: 1.3rem;
+  }
+
+  .header-actions {
+    gap: $spacing-xs;
   }
 
   .user-info {
@@ -218,6 +228,11 @@
     order: 5;
     flex-basis: 100%;
     margin-top: $spacing-xs;
+    padding: $spacing-xs $spacing-sm;
+  }
+
+  .user-greeting {
+    font-size: 0.85rem;
   }
 
   .login-btn {
@@ -225,5 +240,29 @@
     flex-basis: 100%;
     margin-top: $spacing-xs;
     width: 100%;
+  }
+}
+
+// Responsivo - Mobile (480px e abaixo)
+@media (max-width: $breakpoint-xs) {
+  .logo h1 {
+    font-size: 1.1rem;
+  }
+
+  .header-actions {
+    gap: $spacing-xs;
+    flex-wrap: wrap;
+  }
+
+  .wishlist-icon,
+  .orders-icon,
+  .cart-icon {
+    font-size: 1.2rem;
+  }
+
+  .wishlist-count,
+  .cart-count {
+    font-size: 0.75rem;
+    padding: 1px 4px;
   }
 }

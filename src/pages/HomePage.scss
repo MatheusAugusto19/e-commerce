@@ -72,8 +72,19 @@
   gap: $spacing-sm;
 }
 
-// Responsivo - Tablet
-@media (max-width: $breakpoint-tablet) {
+// Responsivo - Large Desktop (1280px+)
+@media (min-width: $breakpoint-xl) {
+  .home-page {
+    padding: $spacing-md;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+}
+
+// Responsivo - Tablet (1024px - 768px)
+@media (max-width: $breakpoint-lg) {
   .products-container {
     grid-template-columns: 1fr;
   }
@@ -87,10 +98,10 @@
   }
 }
 
-// Responsivo - Mobile
-@media (max-width: $breakpoint-mobile) {
+// Responsivo - Mobile Tablet (768px - 640px)
+@media (max-width: $breakpoint-md) {
   .home-page {
-    padding: $spacing-xs;
+    padding: $spacing-sm;
   }
 
   .products-container {
@@ -98,24 +109,104 @@
   }
 
   .hero {
-    padding: 2rem $spacing-xs;
+    padding: 2rem $spacing-sm;
     margin-bottom: 2rem;
 
     h2 {
-      font-size: 1.5rem;
+      font-size: 1.8rem;
     }
 
     p {
-      font-size: 1rem;
+      font-size: 1.05rem;
     }
   }
 
   .products-grid {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
     gap: $spacing-xs;
   }
 
   .section-title {
+    font-size: 1.4rem;
+  }
+
+  .products-section h2 {
+    font-size: 1.6rem;
+  }
+}
+
+// Responsivo - Small Mobile (640px - 480px)
+@media (max-width: $breakpoint-sm) {
+  .home-page {
+    padding: $spacing-xs;
+  }
+
+  .hero {
+    padding: 1.5rem $spacing-xs;
+    margin-bottom: 1.5rem;
+    border-radius: 4px;
+
+    h2 {
+      font-size: 1.4rem;
+      margin-bottom: $spacing-xs;
+    }
+
+    p {
+      font-size: 0.95rem;
+    }
+  }
+
+  .products-section h2 {
     font-size: 1.3rem;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+
+  .section-title {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+}
+
+// Responsivo - Extra Small Mobile (480px e abaixo)
+@media (max-width: $breakpoint-xs) {
+  .home-page {
+    padding: 4px;
+  }
+
+  .hero {
+    padding: 1rem 4px;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+
+    h2 {
+      font-size: 1.2rem;
+      margin-bottom: 6px;
+    }
+
+    p {
+      font-size: 0.85rem;
+    }
+  }
+
+  .products-section h2 {
+    font-size: 1.1rem;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px;
+  }
+
+  .section-title {
+    font-size: 1rem;
+    margin-bottom: 6px;
+  }
+
+  .no-products {
+    min-height: 200px;
   }
 }

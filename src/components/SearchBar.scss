@@ -141,10 +141,12 @@
   font-style: italic;
 }
 
-// Responsivo
-@media (max-width: $breakpoint-mobile) {
+// Responsivo - Tablet
+@media (max-width: $breakpoint-md) {
   .search-bar-container {
     min-width: 150px;
+    max-width: 100%;
+    flex: 1;
   }
 
   .search-input {
@@ -159,5 +161,42 @@
 
   .suggestions-dropdown {
     max-height: 300px;
+  }
+}
+
+// Responsivo - Mobile
+@media (max-width: $breakpoint-xs) {
+  .search-bar-container {
+    min-width: 80px;
+  }
+
+  .search-bar {
+    gap: 2px;
+    padding: 2px;
+  }
+
+  .search-input {
+    font-size: 0.8rem;
+    padding: $spacing-xs 4px;
+  }
+
+  .search-btn {
+    font-size: 0.9rem;
+    padding: 4px 6px;
+  }
+
+  .suggestion-item {
+    padding: 6px;
+    font-size: 0.85rem;
+  }
+
+  .suggestions-dropdown {
+    max-height: 250px;
+    font-size: 0.9rem;
+  }
+
+  .quick-title {
+    padding: 6px;
+    font-size: 0.75rem;
   }
 }

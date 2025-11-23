@@ -168,13 +168,42 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: $breakpoint-md) {
   .modal-content {
     max-width: 100%;
+    width: 95%;
     padding: $spacing-md;
+    max-height: 90vh;
+    overflow-y: auto;
   }
 
   .modal-content h2 {
     font-size: 1.3rem;
+    margin-bottom: $spacing-sm;
+  }
+
+  .form-group {
+    gap: $spacing-xs;
+  }
+}
+
+@media (max-width: $breakpoint-xs) {
+  .modal-content {
+    width: 98%;
+    padding: $spacing-md;
+  }
+
+  .modal-content h2 {
+    font-size: 1.1rem;
+  }
+
+  .submit-btn {
+    font-size: 0.9rem;
+    padding: $spacing-sm $spacing-xs;
+  }
+
+  .form-group input {
+    font-size: 1rem;
+    padding: 8px;
   }
 }
