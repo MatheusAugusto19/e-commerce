@@ -7,6 +7,7 @@ import { FilterProvider } from './context/FilterProvider'
 import { WishlistProvider } from './context/WishlistProvider'
 import { ReviewProvider } from './context/ReviewProvider'
 import { CouponProvider } from './context/CouponProvider'
+import { PaginationProvider } from './context/PaginationProvider'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import NotificationContainer from './components/NotificationContainer'
@@ -47,20 +48,22 @@ function App() {
           <FilterProvider>
             <ReviewProvider>
               <CouponProvider>
-                <NotificationProvider>
-                  <div className="app-layout">
-                    <Header />
-                    <main className="app-main">
-                      <NotificationContainer />
-                      {currentPage === 'home' && <HomePage />}
-                      {currentPage === 'cart' && <CartPage />}
-                      {currentPage === 'checkout' && <CheckoutPage />}
-                      {currentPage === 'orders' && <OrderHistoryPage />}
-                      {currentPage === 'wishlist' && <WishlistPage />}
-                    </main>
-                    <Footer />
-                  </div>
-                </NotificationProvider>
+                <PaginationProvider>
+                  <NotificationProvider>
+                    <div className="app-layout">
+                      <Header />
+                      <main className="app-main">
+                        <NotificationContainer />
+                        {currentPage === 'home' && <HomePage />}
+                        {currentPage === 'cart' && <CartPage />}
+                        {currentPage === 'checkout' && <CheckoutPage />}
+                        {currentPage === 'orders' && <OrderHistoryPage />}
+                        {currentPage === 'wishlist' && <WishlistPage />}
+                      </main>
+                      <Footer />
+                    </div>
+                  </NotificationProvider>
+                </PaginationProvider>
               </CouponProvider>
             </ReviewProvider>
           </FilterProvider>

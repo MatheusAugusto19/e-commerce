@@ -1,0 +1,101 @@
+@import "../styles/variables";
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: $spacing-sm;
+  margin: $spacing-lg 0;
+  flex-wrap: wrap;
+}
+
+.pagination-numbers {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.pagination-btn {
+  background-color: white;
+  border: 2px solid $color-primary;
+  color: $color-primary;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 40px;
+
+  &:hover:not(:disabled) {
+    background-color: $color-primary;
+    color: white;
+    transform: scale(1.05);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-color: #ddd;
+    color: #ddd;
+  }
+
+  &.active {
+    background-color: $color-primary;
+    color: white;
+    font-weight: bold;
+  }
+
+  &.page-btn {
+    min-width: 38px;
+  }
+
+  &.prev-btn,
+  &.next-btn {
+    min-width: auto;
+    padding: 8px 16px;
+  }
+}
+
+.pagination-ellipsis {
+  color: $color-text-light;
+  font-weight: bold;
+  padding: 0 4px;
+}
+
+.pagination-info {
+  font-size: 0.9rem;
+  color: $color-text-light;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+// Responsivo
+@media (max-width: $breakpoint-mobile) {
+  .pagination-container {
+    gap: $spacing-xs;
+    margin: $spacing-md 0;
+  }
+
+  .pagination-btn {
+    padding: 6px 10px;
+    font-size: 0.9rem;
+    min-width: 36px;
+
+    &.prev-btn,
+    &.next-btn {
+      padding: 6px 12px;
+      font-size: 0.8rem;
+    }
+  }
+
+  .pagination-numbers {
+    gap: 2px;
+  }
+
+  .pagination-info {
+    font-size: 0.8rem;
+    width: 100%;
+    text-align: center;
+    order: 3;
+  }
+}
