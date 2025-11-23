@@ -3,7 +3,16 @@ import { useCart } from "../context/useCart";
 import { useNotification } from "../context/useNotification";
 import { useOrder } from "../context/useOrder";
 import { useCoupon } from "../context/useCoupon";
+import { useFreight } from "../context/useFreight";
 import CouponSection from "../components/CouponSection";
+import FreightSelector from "../components/FreightSelector";
+import {
+  formatCardNumber,
+  formatCardExpiry,
+  formatCVC,
+  validateAllPaymentData,
+  maskCardNumber,
+} from "../utils/paymentValidation";
 import "./CheckoutPage.scss";
 
 export default function CheckoutPage() {
@@ -11,6 +20,7 @@ export default function CheckoutPage() {
   const { addNotification } = useNotification();
   const { addOrder } = useOrder();
   const { appliedCoupon, calculateDiscount } = useCoupon();
+  const { selectedFreight, selectFreight } = useFreight();
   const [step, setStep] = useState(1); // 1: Endereço, 2: Pagamento, 3: Confirmação
   const [formData, setFormData] = useState({
     name: "",
@@ -29,6 +39,7 @@ export default function CheckoutPage() {
     cardExpiry: "",
     cardCVC: "",
   });
+  const [paymentErrors, setPaymentErrors] = useState({});
   const [orderNumber, setOrderNumber] = useState("");
 
   const handleAddressChange = (e) => {
@@ -38,7 +49,27 @@ export default function CheckoutPage() {
 
   const handlePaymentChange = (e) => {
     const { name, value } = e.target;
-    setPaymentData({ ...paymentData, [name]: value });
+    let formattedValue = value;
+
+    // Aplicar máscaras conforme o campo
+    if (name === "cardNumber") {
+      formattedValue = formatCardNumber(value);
+    } else if (name === "cardExpiry") {
+      formattedValue = formatCardExpiry(value);
+    } else if (name === "cardCVC") {
+      formattedValue = formatCVC(value);
+    }
+
+    setPaymentData({ ...paymentData, [name]: formattedValue });
+
+    // Validar em tempo real e remover erro se ficar válido
+    if (paymentErrors[name]) {
+      const tempData = { ...paymentData, [name]: formattedValue };
+      const validation = validateAllPaymentData(tempData);
+      if (!validation.errors[name]) {
+        setPaymentErrors({ ...paymentErrors, [name]: undefined });
+      }
+    }
   };
 
   const isAddressValid = () => {
@@ -55,27 +86,28 @@ export default function CheckoutPage() {
   };
 
   const isPaymentValid = () => {
-    return (
-      paymentData.cardName &&
-      paymentData.cardNumber.length === 16 &&
-      paymentData.cardExpiry &&
-      paymentData.cardCVC.length === 3
-    );
+    const validation = validateAllPaymentData(paymentData);
+    return validation.valid;
   };
 
   const handlePlaceOrder = () => {
-    if (!isPaymentValid()) {
-      addNotification("Por favor, preencha todos os dados do cartão corretamente", "error", 3000);
+    // Validar dados de pagamento
+    const validation = validateAllPaymentData(paymentData);
+    
+    if (!validation.valid) {
+      setPaymentErrors(validation.errors);
+      addNotification("Por favor, corrija os erros no formulário de pagamento", "error", 3000);
       return;
     }
 
     // Gerar número de pedido
     const newOrderNumber = "PED-" + Date.now();
     
-    // Calcular total com desconto
+    // Calcular total com desconto e frete
     const subtotal = getTotal();
     const discount = calculateDiscount();
-    const finalTotal = subtotal - discount;
+    const freight = selectedFreight?.price || 0;
+    const finalTotal = subtotal - discount + freight;
     
     // Salvar pedido no OrderProvider
     addOrder({
@@ -83,9 +115,12 @@ export default function CheckoutPage() {
       total: finalTotal,
       subtotal: subtotal,
       discount: discount,
+      freight: freight,
+      freightType: selectedFreight?.name || 'Não selecionado',
       couponCode: appliedCoupon ? appliedCoupon.code : null,
       shippingInfo: formData,
       paymentMethod: paymentData.cardName,
+      cardMasked: maskCardNumber(paymentData.cardNumber),
     });
 
     setOrderNumber(newOrderNumber);
@@ -241,6 +276,14 @@ export default function CheckoutPage() {
                     style={{ maxWidth: "150px" }}
                   />
                 </div>
+
+                {formData.zipcode && (
+                  <FreightSelector 
+                    zipcode={formData.zipcode} 
+                    cartTotal={getTotal()}
+                    onSelect={(freight) => selectFreight(freight)}
+                  />
+                )}
               </form>
 
               <div className="button-group">
@@ -264,43 +307,68 @@ export default function CheckoutPage() {
               <h2>Dados de Pagamento</h2>
               <form>
                 <div className="form-row">
-                  <input
-                    type="text"
-                    name="cardName"
-                    placeholder="Nome no Cartão"
-                    value={paymentData.cardName}
-                    onChange={handlePaymentChange}
-                  />
+                  <div className="form-group">
+                    <input
+                      type="text"
+                      name="cardName"
+                      placeholder="Nome no Cartão"
+                      value={paymentData.cardName}
+                      onChange={handlePaymentChange}
+                      className={paymentErrors.cardName ? 'input-error' : ''}
+                    />
+                    {paymentErrors.cardName && (
+                      <span className="error-message">⚠️ {paymentErrors.cardName}</span>
+                    )}
+                  </div>
                 </div>
 
                 <div className="form-row">
-                  <input
-                    type="text"
-                    name="cardNumber"
-                    placeholder="Número do Cartão (16 dígitos)"
-                    value={paymentData.cardNumber}
-                    onChange={handlePaymentChange}
-                    maxLength="16"
-                  />
+                  <div className="form-group">
+                    <input
+                      type="text"
+                      name="cardNumber"
+                      placeholder="1234 5678 9012 3456"
+                      value={paymentData.cardNumber}
+                      onChange={handlePaymentChange}
+                      maxLength="19"
+                      className={paymentErrors.cardNumber ? 'input-error' : ''}
+                    />
+                    {paymentErrors.cardNumber && (
+                      <span className="error-message">⚠️ {paymentErrors.cardNumber}</span>
+                    )}
+                  </div>
                 </div>
 
                 <div className="form-row">
-                  <input
-                    type="text"
-                    name="cardExpiry"
-                    placeholder="MM/AA"
-                    value={paymentData.cardExpiry}
-                    onChange={handlePaymentChange}
-                  />
-                  <input
-                    type="text"
-                    name="cardCVC"
-                    placeholder="CVC"
-                    value={paymentData.cardCVC}
-                    onChange={handlePaymentChange}
-                    maxLength="3"
-                    style={{ maxWidth: "100px" }}
-                  />
+                  <div className="form-group">
+                    <input
+                      type="text"
+                      name="cardExpiry"
+                      placeholder="MM/AA"
+                      value={paymentData.cardExpiry}
+                      onChange={handlePaymentChange}
+                      maxLength="5"
+                      className={paymentErrors.cardExpiry ? 'input-error' : ''}
+                    />
+                    {paymentErrors.cardExpiry && (
+                      <span className="error-message">⚠️ {paymentErrors.cardExpiry}</span>
+                    )}
+                  </div>
+                  <div className="form-group">
+                    <input
+                      type="text"
+                      name="cardCVC"
+                      placeholder="CVC"
+                      value={paymentData.cardCVC}
+                      onChange={handlePaymentChange}
+                      maxLength="3"
+                      className={paymentErrors.cardCVC ? 'input-error' : ''}
+                      style={{ maxWidth: "100px" }}
+                    />
+                    {paymentErrors.cardCVC && (
+                      <span className="error-message">⚠️ {paymentErrors.cardCVC}</span>
+                    )}
+                  </div>
                 </div>
               </form>
 
@@ -310,7 +378,11 @@ export default function CheckoutPage() {
                 <button onClick={() => setStep(1)} className="back-btn">
                   ← Voltar
                 </button>
-                <button onClick={handlePlaceOrder} className="next-btn">
+                <button 
+                  onClick={handlePlaceOrder} 
+                  className="next-btn"
+                  disabled={!isPaymentValid()}
+                >
                   Confirmar Pedido
                 </button>
               </div>
@@ -340,7 +412,7 @@ export default function CheckoutPage() {
               </div>
               <div className="total-row">
                 <span>Frete:</span>
-                <span>Grátis</span>
+                <span>{selectedFreight ? `R$ ${selectedFreight.price.toFixed(2)}` : 'Não selecionado'}</span>
               </div>
               {appliedCoupon && calculateDiscount() > 0 && (
                 <div className="total-row discount-row">
@@ -350,7 +422,7 @@ export default function CheckoutPage() {
               )}
               <div className="total-row final">
                 <span>Total:</span>
-                <span>R$ {(getTotal() - calculateDiscount()).toFixed(2)}</span>
+                <span>R$ {(getTotal() - calculateDiscount() + (selectedFreight?.price || 0)).toFixed(2)}</span>
               </div>
             </div>
           </div>

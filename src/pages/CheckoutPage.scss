@@ -129,6 +129,34 @@
     &::placeholder {
       color: #999;
     }
+
+    &.input-error {
+      border-color: #e74c3c;
+      background-color: rgba(231, 76, 60, 0.05);
+
+      &:focus {
+        box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+      }
+    }
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+
+  input {
+    width: 100%;
+  }
+
+  .error-message {
+    font-size: 0.85rem;
+    color: #e74c3c;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 4px;
   }
 }
 

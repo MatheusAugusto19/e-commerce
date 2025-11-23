@@ -8,6 +8,7 @@ import { WishlistProvider } from './context/WishlistProvider'
 import { ReviewProvider } from './context/ReviewProvider'
 import { CouponProvider } from './context/CouponProvider'
 import { PaginationProvider } from './context/PaginationProvider'
+import { FreightProvider } from './context/FreightProvider'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import NotificationContainer from './components/NotificationContainer'
@@ -49,20 +50,22 @@ function App() {
             <ReviewProvider>
               <CouponProvider>
                 <PaginationProvider>
-                  <NotificationProvider>
-                    <div className="app-layout">
-                      <Header />
-                      <main className="app-main">
-                        <NotificationContainer />
-                        {currentPage === 'home' && <HomePage />}
-                        {currentPage === 'cart' && <CartPage />}
-                        {currentPage === 'checkout' && <CheckoutPage />}
-                        {currentPage === 'orders' && <OrderHistoryPage />}
-                        {currentPage === 'wishlist' && <WishlistPage />}
-                      </main>
-                      <Footer />
-                    </div>
-                  </NotificationProvider>
+                  <FreightProvider>
+                    <NotificationProvider>
+                      <div className="app-layout">
+                        <Header />
+                        <main className="app-main">
+                          <NotificationContainer />
+                          {currentPage === 'home' && <HomePage />}
+                          {currentPage === 'cart' && <CartPage />}
+                          {currentPage === 'checkout' && <CheckoutPage />}
+                          {currentPage === 'orders' && <OrderHistoryPage />}
+                          {currentPage === 'wishlist' && <WishlistPage />}
+                        </main>
+                        <Footer />
+                      </div>
+                    </NotificationProvider>
+                  </FreightProvider>
                 </PaginationProvider>
               </CouponProvider>
             </ReviewProvider>
