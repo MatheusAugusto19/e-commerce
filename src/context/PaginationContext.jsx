@@ -1,5 +1,6 @@
-import React, { useState, useCallback } from 'react';
-import { PaginationContext } from './createPaginationContext';
+import React, { useState, useCallback, createContext } from 'react';
+
+export const PaginationContext = createContext();
 
 export const PaginationProvider = ({ children }) => {
   const [currentPage, setCurrentPage] = useState(1);

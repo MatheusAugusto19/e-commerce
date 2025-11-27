@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { WishlistContext } from './createWishlistContext';
+import { WishlistContext } from './WishlistContext';
 
 export const useWishlist = () => {
   const context = useContext(WishlistContext);

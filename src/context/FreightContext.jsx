@@ -1,5 +1,6 @@
-import React, { useState, useCallback, useMemo } from 'react';
-import { FreightContext } from './createFreightContext';
+import React, { useState, useCallback, useMemo, createContext } from 'react';
+
+export const FreightContext = createContext();
 
 export const FreightProvider = ({ children }) => {
   const [selectedFreight, setSelectedFreight] = useState(null);

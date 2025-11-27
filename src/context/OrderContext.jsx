@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { OrderContext } from "./createOrderContext";
+import React, { useState, useEffect, createContext } from "react";
+
+export const OrderContext = createContext();
 
 const ORDERS_STORAGE_KEY = "ecommerce_orders";
 

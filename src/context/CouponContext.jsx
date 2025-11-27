@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { CouponContext } from './createCouponContext';
+import React, { useState, createContext } from 'react';
+
+export const CouponContext = createContext();
 
 export const CouponProvider = ({ children }) => {
   // Lista de cupons disponíveis (hardcoded para exemplo)

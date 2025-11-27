@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { FreightContext } from './createFreightContext';
+import { FreightContext } from './FreightContext';
 
 export const useFreight = () => {
   const context = useContext(FreightContext);

@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { CouponContext } from './createCouponContext';
+import { CouponContext } from './CouponContext';
 
 export const useCoupon = () => {
   const context = useContext(CouponContext);

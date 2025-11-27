@@ -1,5 +1,7 @@
-import React, { useState } from "react";
-import AuthContext from "./createAuthContext";
+import React, { useState, createContext } from "react";
+
+// Criação do Contexto
+export const AuthContext = createContext();
 
 // Initialize user from localStorage
 const initializeUser = () => {
@@ -15,7 +17,7 @@ const initializeUser = () => {
   return null;
 };
 
-export default function AuthProvider({ children }) {
+export function AuthProvider({ children }) {
   const [user, setUser] = useState(initializeUser);
 
   // Simulate user database (in real app, this would be backend API)

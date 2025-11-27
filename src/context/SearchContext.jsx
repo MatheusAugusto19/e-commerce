@@ -1,5 +1,6 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { SearchContext } from './createSearchContext';
+import React, { useState, useCallback, useEffect, createContext } from 'react';
+
+export const SearchContext = createContext();
 
 export const SearchProvider = ({ children }) => {
   const [searchHistory, setSearchHistory] = useState(() => {

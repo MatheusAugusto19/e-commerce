@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { ReviewContext } from './createReviewContext';
+import React, { useState, useEffect, createContext } from 'react';
+
+export const ReviewContext = createContext();
 
 export const ReviewProvider = ({ children }) => {
   const [reviews, setReviews] = useState(() => {

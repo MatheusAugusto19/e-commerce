@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { CartContext } from "./createCartContext";
+import React, { useState, useEffect, createContext } from "react";
 
 const STORAGE_KEY = "ecommerce_cart";
+
+// Criação do Contexto
+export const CartContext = createContext();
 
 // Função para carregar do localStorage
 const loadCartFromStorage = () => {

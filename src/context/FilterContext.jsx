@@ -1,5 +1,6 @@
-import React, { useState, useCallback, useMemo } from 'react';
-import { FilterContext } from './createFilterContext';
+import React, { useState, useCallback, useMemo, createContext } from 'react';
+
+export const FilterContext = createContext();
 
 export const FilterProvider = ({ children }) => {
   const [searchQuery, setSearchQuery] = useState('');
