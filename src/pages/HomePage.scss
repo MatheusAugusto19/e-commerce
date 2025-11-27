@@ -86,7 +86,8 @@
 // Responsivo - Tablet (1024px - 768px)
 @media (max-width: $breakpoint-lg) {
   .products-container {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
   }
 
   .products-grid {
