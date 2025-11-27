@@ -1,5 +1,5 @@
 import React from 'react';
-import { useFilter } from '../context/useFilter';
+import { useProduct } from '../context/useProduct';
 import './FilterPanel.scss';
 
 export default function FilterPanel() {
@@ -12,7 +12,7 @@ export default function FilterPanel() {
     setSortBy,
     setSearchQuery,
     getCategories,
-  } = useFilter();
+  } = useProduct();
 
   const categories = getCategories();
 

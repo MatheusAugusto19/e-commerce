@@ -5,27 +5,15 @@ import Pagination from "../components/Pagination";
 import ProductDetailPage from "./ProductDetailPage";
 import { useCart } from "../context/useCart";
 import { useNotification } from "../context/useNotification";
-import { useFilter } from "../context/useFilter";
-import { usePagination } from "../context/usePagination";
-import "./HomePage.scss";
+import { useProduct } from "../context/useProduct";
 
 export default function HomePage() {
   const { addToCart } = useCart();
   const { addNotification } = useNotification();
-  const { getFilteredProducts } = useFilter();
-  const { getPaginatedItems, resetPagination } = usePagination();
+  const { paginatedProducts, filteredProducts } = useProduct();
   const [selectedProductId, setSelectedProductId] = useState(null);
 
-  // Usar produtos filtrados do FilterProvider
-  const allProducts = getFilteredProducts();
-  
-  // Reset paginação quando filtros mudarem
-  useEffect(() => {
-    resetPagination();
-  }, [allProducts.length, resetPagination]);
-
-  // Obter produtos da página atual
-  const products = getPaginatedItems(allProducts);
+  const products = paginatedProducts;
 
   const handleAddToCart = (product) => {
     addToCart(product);
@@ -52,9 +40,9 @@ export default function HomePage() {
           <FilterPanel />
           <div className="products-wrapper">
             <h2 className="section-title">
-              Produtos ({allProducts.length} encontrados)
+              Produtos ({filteredProducts.length} encontrados)
             </h2>
-            {allProducts.length === 0 ? (
+            {filteredProducts.length === 0 ? (
               <div className="no-products">
                 <p>😢 Nenhum produto encontrado com os filtros selecionados</p>
               </div>
@@ -70,7 +58,7 @@ export default function HomePage() {
                     />
                   ))}
                 </div>
-                <Pagination totalItems={allProducts.length} />
+                <Pagination totalItems={filteredProducts.length} />
               </>
             )}
           </div>

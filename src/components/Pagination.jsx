@@ -1,10 +1,9 @@
 import React from 'react';
-import { usePagination } from '../context/usePagination';
+import { useProduct } from '../context/useProduct';
 import './Pagination.scss';
 
 export default function Pagination({ totalItems }) {
-  const { currentPage, getTotalPages, goToPage, nextPage, prevPage } = usePagination();
-  const totalPages = getTotalPages(totalItems);
+  const { currentPage, totalPages, goToPage } = useProduct();
 
   if (totalPages <= 1) {
     return null; // Não exibir paginação se houver apenas uma página
@@ -34,7 +33,7 @@ export default function Pagination({ totalItems }) {
     <div className="pagination-container">
       <button
         className="pagination-btn prev-btn"
-        onClick={() => prevPage(totalItems)}
+        onClick={() => goToPage(currentPage - 1)}
         disabled={currentPage === 1}
         title="Página anterior"
       >
@@ -47,7 +46,7 @@ export default function Pagination({ totalItems }) {
           <>
             <button
               className="pagination-btn page-btn"
-              onClick={() => goToPage(1, totalItems)}
+              onClick={() => goToPage(1)}
             >
               1
             </button>
@@ -60,7 +59,7 @@ export default function Pagination({ totalItems }) {
           <button
             key={page}
             className={`pagination-btn page-btn ${page === currentPage ? 'active' : ''}`}
-            onClick={() => goToPage(page, totalItems)}
+            onClick={() => goToPage(page)}
           >
             {page}
           </button>
@@ -74,7 +73,7 @@ export default function Pagination({ totalItems }) {
             )}
             <button
               className="pagination-btn page-btn"
-              onClick={() => goToPage(totalPages, totalItems)}
+              onClick={() => goToPage(totalPages)}
             >
               {totalPages}
             </button>
@@ -84,7 +83,7 @@ export default function Pagination({ totalItems }) {
 
       <button
         className="pagination-btn next-btn"
-        onClick={() => nextPage(totalItems)}
+        onClick={() => goToPage(currentPage + 1)}
         disabled={currentPage === totalPages}
         title="Próxima página"
       >

@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useSearch } from '../context/useSearch';
-import { useFilter } from '../context/useFilter';
+import { useProduct } from '../context/useProduct';
 import './SearchBar.scss';
 
 export default function SearchBar({ onSearch }) {
-  const { suggestions, generateSuggestions, getQuickSuggestions } = useSearch();
-  const { getFilteredProducts, setSearchQuery } = useFilter();
+  const {
+    allProducts,
+    setSearchQuery,
+    suggestions,
+    generateSuggestions,
+    getQuickSuggestions,
+  } = useProduct();
   const [query, setQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const allProducts = getFilteredProducts();
 
   // Gerar sugestões quando digitar
   useEffect(() => {
