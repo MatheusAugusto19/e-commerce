@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { Routes, Route } from 'react-router-dom'
 import './App.scss'
 import { ProductProvider } from './context/ProductProvider'
 import { CartProvider } from './context/CartContext'
@@ -19,29 +19,6 @@ import OrderHistoryPage from './pages/OrderHistoryPage'
 import WishlistPage from './pages/WishlistPage'
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('home')
-
-  useEffect(() => {
-    const handleHashChange = () => {
-      if (window.location.hash === '#carrinho') {
-        setCurrentPage('cart')
-      } else if (window.location.hash === '#checkout') {
-        setCurrentPage('checkout')
-      } else if (window.location.hash === '#pedidos') {
-        setCurrentPage('orders')
-      } else if (window.location.hash === '#favoritos') {
-        setCurrentPage('wishlist')
-      } else {
-        setCurrentPage('home')
-      }
-    }
-
-    window.addEventListener('hashchange', handleHashChange)
-    handleHashChange()
-
-    return () => window.removeEventListener('hashchange', handleHashChange)
-  }, [])
-
   return (
     <AuthProvider>
       <CartProvider>
@@ -56,11 +33,13 @@ function App() {
                         <Header />
                         <main className="app-main">
                           <NotificationContainer />
-                          {currentPage === 'home' && <HomePage />}
-                          {currentPage === 'cart' && <CartPage />}
-                          {currentPage === 'checkout' && <CheckoutPage />}
-                          {currentPage === 'orders' && <OrderHistoryPage />}
-                          {currentPage === 'wishlist' && <WishlistPage />}
+                          <Routes>
+                            <Route path="/" element={<HomePage />} />
+                            <Route path="/cart" element={<CartPage />} />
+                            <Route path="/checkout" element={<CheckoutPage />} />
+                            <Route path="/orders" element={<OrderHistoryPage />} />
+                            <Route path="/wishlist" element={<WishlistPage />} />
+                          </Routes>
                         </main>
                         <Footer />
                       </div>

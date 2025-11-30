@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { useCart } from "../context/useCart";
 import { useWishlist } from "../context/useWishlist";
 import { useAuth } from "../context/useAuth";
@@ -12,30 +13,14 @@ export default function Header() {
   const { user, logout, isAuthenticated } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const goToCart = () => {
-    window.location.hash = '#carrinho';
-  };
-
-  const goHome = () => {
-    window.location.hash = '';
-  };
-
-  const goToOrders = () => {
-    window.location.hash = '#pedidos';
-  };
-
-  const goToWishlist = () => {
-    window.location.hash = '#favoritos';
-  };
-
   return (
     <header className="header">
       <div className="header-container">
-        <button onClick={goHome} className="logo-link">
+        <Link to="/" className="logo-link">
           <div className="logo">
             <h1>🛍️ E-Commerce</h1>
           </div>
-        </button>
+        </Link>
         
         <SearchBar />
         
@@ -59,17 +44,17 @@ export default function Header() {
             </button>
           )}
 
-          <button onClick={goToWishlist} className="wishlist-btn" title="Favoritos">
+          <Link to="/wishlist" className="wishlist-btn" title="Favoritos">
             <span className="wishlist-icon">❤️</span>
             <span className="wishlist-count">{getTotalWishlistItems()}</span>
-          </button>
-          <button onClick={goToOrders} className="orders-btn" title="Histórico de pedidos">
+          </Link>
+          <Link to="/orders" className="orders-btn" title="Histórico de pedidos">
             <span className="orders-icon">📦</span>
-          </button>
-          <button onClick={goToCart} className="cart-btn">
+          </Link>
+          <Link to="/cart" className="cart-btn">
             <span className="cart-icon">🛒</span>
             <span className="cart-count">{getTotalItems()}</span>
-          </button>
+          </Link>
         </div>
       </div>
 
