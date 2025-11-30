@@ -1,12 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Footer.scss';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
-
-  const handleNavigation = (hash) => {
-    window.location.hash = hash;
-  };
 
   return (
     <footer className="footer">
@@ -37,24 +34,24 @@ export default function Footer() {
           <h3>Menu Rápido</h3>
           <ul className="footer-links">
             <li>
-              <button onClick={() => handleNavigation('')}>
+              <Link to="/">
                 🏠 Home
-              </button>
+              </Link>
             </li>
             <li>
-              <button onClick={() => handleNavigation('#carrinho')}>
+              <Link to="/cart">
                 🛒 Carrinho
-              </button>
+              </Link>
             </li>
             <li>
-              <button onClick={() => handleNavigation('#favoritos')}>
+              <Link to="/wishlist">
                 ❤️ Favoritos
-              </button>
+              </Link>
             </li>
             <li>
-              <button onClick={() => handleNavigation('#pedidos')}>
+              <Link to="/orders">
                 📦 Meus Pedidos
-              </button>
+              </Link>
             </li>
           </ul>
         </div>
