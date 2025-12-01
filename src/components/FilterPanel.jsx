@@ -11,10 +11,8 @@ export default function FilterPanel() {
     sortBy,
     setSortBy,
     setSearchQuery,
-    getCategories,
+    getCategories: categories,
   } = useProduct();
-
-  const categories = getCategories();
 
   const categoryLabels = {
     all: 'Todos os Produtos',

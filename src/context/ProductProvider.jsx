@@ -125,7 +125,7 @@ export const ProductProvider = ({ children }) => {
   }
 
   // === HELPER FUNCTIONS ===
-  const getCategories = useMemo(() => {
+  const categories = useMemo(() => {
     const categories = ["all"];
     allProducts.forEach((product) => {
       if (!categories.includes(product.category)) {
@@ -154,7 +154,7 @@ export const ProductProvider = ({ children }) => {
         .filter((product) => product.name.toLowerCase().includes(q))
         .map((product) => ({ type: 'product', value: product.name, id: product.id }))
         .slice(0, 5);
-      const categoryMatches = getCategories
+      const categoryMatches = categories
         .filter((cat) => cat.toLowerCase().includes(q))
         .map((cat) => ({ type: 'category', value: cat }))
         .slice(0, 3);
@@ -164,7 +164,7 @@ export const ProductProvider = ({ children }) => {
         .slice(0, 3);
       setSuggestions([...productMatches, ...categoryMatches, ...historyMatches]);
     },
-    [allProducts, getCategories, searchHistory]
+    [allProducts, categories, searchHistory]
   );
 
   const getQuickSuggestions = useCallback(() => {
@@ -194,7 +194,7 @@ export const ProductProvider = ({ children }) => {
     setItemsPerPage: handleSetItemsPerPage,
     goToPage,
     // Helpers
-    getCategories,
+    categories,
     addToHistory,
     generateSuggestions,
     getQuickSuggestions,
