@@ -96,7 +96,7 @@ export const ProductProvider = ({ children }) => {
         setCurrentPage(pageNumber);
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
-    }, [totalPages]);
+    }, [totalPages, setCurrentPage]);
 
   // === ENHANCED SETTERS (with pagination reset) ===
   const handleSetSearchQuery = (query) => {
@@ -141,7 +141,7 @@ export const ProductProvider = ({ children }) => {
       const filtered = prev.filter((item) => item.query !== query.trim());
       return [{ query: query.trim(), timestamp: new Date().toISOString() }, ...filtered].slice(0, 20);
     });
-  }, []);
+  }, [setSearchHistory]);
 
   const generateSuggestions = useCallback(
     (query) => {
@@ -164,7 +164,7 @@ export const ProductProvider = ({ children }) => {
         .slice(0, 3);
       setSuggestions([...productMatches, ...categoryMatches, ...historyMatches]);
     },
-    [allProducts, categories, searchHistory]
+    [allProducts, categories, searchHistory, setSuggestions]
   );
 
   const getQuickSuggestions = useCallback(() => {

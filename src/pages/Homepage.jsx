@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import ProductCard from "../components/ProductCard";
 import FilterPanel from "../components/FilterPanel";
 import Pagination from "../components/Pagination";
-import ProductDetailPage from "./ProductDetailPage";
 import { useCart } from "../context/useCart";
 import { useNotification } from "../context/useNotification";
 import { useProduct } from "../context/useProduct";
@@ -11,21 +10,16 @@ export default function HomePage() {
   const { addToCart } = useCart();
   const { addNotification } = useNotification();
   const { paginatedProducts, filteredProducts } = useProduct();
-  const [selectedProductId, setSelectedProductId] = useState(null);
 
   const products = paginatedProducts;
 
   const handleAddToCart = (product) => {
     addToCart(product);
-    addNotification(`${product.name} adicionado ao carrinho! 🛒`, "success", 2000);
-  };
-
-  const handleViewDetails = (productId) => {
-    setSelectedProductId(productId);
-  };
-
-  const handleCloseDetails = () => {
-    setSelectedProductId(null);
+    addNotification(
+      `${product.name} adicionado ao carrinho! 🛒`,
+      "success",
+      2000
+    );
   };
 
   return (
@@ -54,7 +48,6 @@ export default function HomePage() {
                       key={product.id}
                       product={product}
                       onAddToCart={handleAddToCart}
-                      onViewDetails={handleViewDetails}
                     />
                   ))}
                 </div>
@@ -64,13 +57,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      {selectedProductId && (
-        <ProductDetailPage
-          productId={selectedProductId}
-          onClose={handleCloseDetails}
-        />
-      )}
     </main>
   );
 }
