@@ -1,90 +1,99 @@
 import React, { useState, useEffect, createContext } from "react";
 
-const STORAGE_KEY = "ecommerce_cart";
+const API_URL = "http://localhost:5000/cart";
 
-// Criação do Contexto
 export const CartContext = createContext();
 
-// Função para carregar do localStorage
-const loadCartFromStorage = () => {
-  const savedCart = localStorage.getItem(STORAGE_KEY);
-  if (savedCart) {
-    try {
-      return JSON.parse(savedCart);
-    } catch (error) {
-      console.error("Erro ao carregar carrinho:", error);
-      return [];
-    }
-  }
-  return [];
-};
-
-// Provider para envolver a app
 export function CartProvider({ children }) {
-  const [cartItems, setCartItems] = useState(() => loadCartFromStorage());
+  const [cartItems, setCartItems] = useState([]);
 
-  // Salvar dados no LocalStorage quando cartItems mudar
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(cartItems));
-  }, [cartItems]);
+    fetch(API_URL)
+      .then((res) => res.json())
+      "      .then((data) => setCartItems(data));"
+  }, []);
 
-  // Adicionar item ao carrinho
   const addToCart = (product) => {
     const existingItem = cartItems.find((item) => item.id === product.id);
 
     if (existingItem) {
-      // Se já existe, aumenta quantidade
-      setCartItems(
-        cartItems.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        )
-      );
+      const updatedItem = { ...existingItem, quantity: existingItem.quantity + 1 };
+      fetch(`${API_URL}/${existingItem.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedItem),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setCartItems(cartItems.map((item) => (item.id === product.id ? data : item)));
+        });
     } else {
-      // Se não existe, adiciona novo com quantidade 1
-      setCartItems([...cartItems, { ...product, quantity: 1 }]);
+      const newItem = { ...product, quantity: 1 };
+      fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newItem),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setCartItems([...cartItems, data]);
+        });
     }
   };
 
-  // Remover item do carrinho
   const removeFromCart = (productId) => {
-    setCartItems(cartItems.filter((item) => item.id !== productId));
+    fetch(`${API_URL}/${productId}`, {
+      method: "DELETE",
+    }).then(() => {
+      setCartItems(cartItems.filter((item) => item.id !== productId));
+    });
   };
 
-  // Aumentar quantidade
   const increaseQuantity = (productId) => {
-    setCartItems(
-      cartItems.map((item) =>
-        item.id === productId
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      )
-    );
+    const itemToUpdate = cartItems.find((item) => item.id === productId);
+    const updatedItem = { ...itemToUpdate, quantity: itemToUpdate.quantity + 1 };
+
+    fetch(`${API_URL}/${productId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedItem),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setCartItems(cartItems.map((item) => (item.id === productId ? data : item)));
+      });
   };
 
-  // Diminuir quantidade
   const decreaseQuantity = (productId) => {
-    setCartItems(
-      cartItems.map((item) =>
-        item.id === productId && item.quantity > 1
-          ? { ...item, quantity: item.quantity - 1 }
-          : item
-      )
-    );
+    const itemToUpdate = cartItems.find((item) => item.id === productId);
+    if (itemToUpdate.quantity > 1) {
+      const updatedItem = { ...itemToUpdate, quantity: itemToUpdate.quantity - 1 };
+
+      fetch(`${API_URL}/${productId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedItem),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setCartItems(cartItems.map((item) => (item.id === productId ? data : item)));
+        });
+    }
   };
 
-  // Limpar carrinho
   const clearCart = () => {
+    cartItems.forEach((item) => {
+      fetch(`${API_URL}/${item.id}`, {
+        method: "DELETE",
+      });
+    });
     setCartItems([]);
   };
 
-  // Calcular total
   const getTotal = () => {
     return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
-  // Quantidade total de itens
   const getTotalItems = () => {
     return cartItems.reduce((total, item) => total + item.quantity, 0);
   };

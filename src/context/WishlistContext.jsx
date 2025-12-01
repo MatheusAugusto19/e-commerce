@@ -1,32 +1,43 @@
 import React, { useState, useEffect, createContext } from 'react';
 
+const API_URL = "http://localhost:5000/wishlist";
+
 export const WishlistContext = createContext();
 
 export const WishlistProvider = ({ children }) => {
-  const [wishlistItems, setWishlistItems] = useState(() => {
-    const saved = localStorage.getItem('ecommerce_wishlist');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [wishlistItems, setWishlistItems] = useState([]);
 
-  // Salvar no localStorage sempre que mudar
   useEffect(() => {
-    localStorage.setItem('ecommerce_wishlist', JSON.stringify(wishlistItems));
-  }, [wishlistItems]);
+    fetch(API_URL)
+      .then((res) => res.json())
+      .then((data) => setWishlistItems(data));
+  }, []);
 
   const addToWishlist = (product) => {
-    setWishlistItems((prevItems) => {
-      const exists = prevItems.some((item) => item.id === product.id);
-      if (exists) {
-        return prevItems;
-      }
-      return [...prevItems, product];
-    });
+    const exists = wishlistItems.some((item) => item.id === product.id);
+    if (!exists) {
+      fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(product),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setWishlistItems((prevItems) => [...prevItems, data]);
+        });
+    }
   };
 
   const removeFromWishlist = (productId) => {
-    setWishlistItems((prevItems) =>
-      prevItems.filter((item) => item.id !== productId)
-    );
+    fetch(`${API_URL}/${productId}`, {
+      method: 'DELETE',
+    }).then(() => {
+      setWishlistItems((prevItems) =>
+        prevItems.filter((item) => item.id !== productId)
+      );
+    });
   };
 
   const isInWishlist = (productId) => {
@@ -34,6 +45,11 @@ export const WishlistProvider = ({ children }) => {
   };
 
   const clearWishlist = () => {
+    wishlistItems.forEach((item) => {
+      fetch(`${API_URL}/${item.id}`, {
+        method: 'DELETE',
+      });
+    });
     setWishlistItems([]);
   };
 

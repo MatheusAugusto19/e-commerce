@@ -1,30 +1,17 @@
 import React, { useState, useEffect, createContext } from "react";
 
+const API_URL = "http://localhost:5000/orders";
+
 export const OrderContext = createContext();
 
-const ORDERS_STORAGE_KEY = "ecommerce_orders";
-
-// Função para carregar pedidos do localStorage
-const loadOrdersFromStorage = () => {
-  const savedOrders = localStorage.getItem(ORDERS_STORAGE_KEY);
-  if (savedOrders) {
-    try {
-      return JSON.parse(savedOrders);
-    } catch (error) {
-      console.error("Erro ao carregar pedidos:", error);
-      return [];
-    }
-  }
-  return [];
-};
-
 export function OrderProvider({ children }) {
-  const [orders, setOrders] = useState(() => loadOrdersFromStorage());
+  const [orders, setOrders] = useState([]);
 
-  // Salvar pedidos no localStorage quando mudar
   useEffect(() => {
-    localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(orders));
-  }, [orders]);
+    fetch(API_URL)
+      .then((res) => res.json())
+      .then((data) => setOrders(data));
+  }, []);
 
   const addOrder = (orderData) => {
     const newOrder = {
@@ -35,16 +22,33 @@ export function OrderProvider({ children }) {
       status: "Processando",
     };
 
-    setOrders((prev) => [newOrder, ...prev]);
+    fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newOrder),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setOrders((prev) => [data, ...prev]);
+      });
     return newOrder;
   };
 
   const updateOrderStatus = (orderId, status) => {
-    setOrders((prev) =>
-      prev.map((order) =>
-        order.id === orderId ? { ...order, status } : order
-      )
-    );
+    const orderToUpdate = orders.find((order) => order.id === orderId);
+    const updatedOrder = { ...orderToUpdate, status };
+
+    fetch(`${API_URL}/${orderId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedOrder),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setOrders((prev) =>
+          prev.map((order) => (order.id === orderId ? data : order))
+        );
+      });
   };
 
   const getOrderById = (orderId) => {
