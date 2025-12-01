@@ -1,16 +1,35 @@
-import React, { useState, useEffect, createContext } from "react";
+import React, { useReducer, useEffect, createContext } from "react";
 
 const API_URL = "http://localhost:5000/cart";
 
 export const CartContext = createContext();
 
+const cartReducer = (state, action) => {
+  switch (action.type) {
+    case "SET_CART":
+      return action.payload;
+    case "ADD_TO_CART":
+      return [...state, action.payload];
+    case "UPDATE_CART_ITEM":
+      return state.map((item) =>
+        item.id === action.payload.id ? action.payload : item
+      );
+    case "REMOVE_FROM_CART":
+      return state.filter((item) => item.id !== action.payload);
+    case "CLEAR_CART":
+      return [];
+    default:
+      return state;
+  }
+};
+
 export function CartProvider({ children }) {
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, dispatch] = useReducer(cartReducer, []);
 
   useEffect(() => {
     fetch(API_URL)
       .then((res) => res.json())
-      "      .then((data) => setCartItems(data));"
+      .then((data) => dispatch({ type: "SET_CART", payload: data }));
   }, []);
 
   const addToCart = (product) => {
@@ -24,9 +43,7 @@ export function CartProvider({ children }) {
         body: JSON.stringify(updatedItem),
       })
         .then((res) => res.json())
-        .then((data) => {
-          setCartItems(cartItems.map((item) => (item.id === product.id ? data : item)));
-        });
+        .then((data) => dispatch({ type: "UPDATE_CART_ITEM", payload: data }));
     } else {
       const newItem = { ...product, quantity: 1 };
       fetch(API_URL, {
@@ -35,18 +52,14 @@ export function CartProvider({ children }) {
         body: JSON.stringify(newItem),
       })
         .then((res) => res.json())
-        .then((data) => {
-          setCartItems([...cartItems, data]);
-        });
+        .then((data) => dispatch({ type: "ADD_TO_CART", payload: data }));
     }
   };
 
   const removeFromCart = (productId) => {
     fetch(`${API_URL}/${productId}`, {
       method: "DELETE",
-    }).then(() => {
-      setCartItems(cartItems.filter((item) => item.id !== productId));
-    });
+    }).then(() => dispatch({ type: "REMOVE_FROM_CART", payload: productId }));
   };
 
   const increaseQuantity = (productId) => {
@@ -59,9 +72,7 @@ export function CartProvider({ children }) {
       body: JSON.stringify(updatedItem),
     })
       .then((res) => res.json())
-      .then((data) => {
-        setCartItems(cartItems.map((item) => (item.id === productId ? data : item)));
-      });
+      .then((data) => dispatch({ type: "UPDATE_CART_ITEM", payload: data }));
   };
 
   const decreaseQuantity = (productId) => {
@@ -75,9 +86,7 @@ export function CartProvider({ children }) {
         body: JSON.stringify(updatedItem),
       })
         .then((res) => res.json())
-        .then((data) => {
-          setCartItems(cartItems.map((item) => (item.id === productId ? data : item)));
-        });
+        .then((data) => dispatch({ type: "UPDATE_CART_ITEM", payload: data }));
     }
   };
 
@@ -87,7 +96,7 @@ export function CartProvider({ children }) {
         method: "DELETE",
       });
     });
-    setCartItems([]);
+    dispatch({ type: "CLEAR_CART" });
   };
 
   const getTotal = () => {
