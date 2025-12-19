@@ -1,25 +1,24 @@
-import React from "react";
-import { useNotification } from "../context/useNotification";
-import "./NotificationContainer.scss";
+import useStore from '../store/useStore';
+import styles from "./NotificationContainer.module.scss";
 
 export default function NotificationContainer() {
-  const { notifications, removeNotification } = useNotification();
+  const { notifications, removeNotification } = useStore();
 
   return (
-    <div className="notification-container">
+    <div className={styles.notificationContainer}>
       {notifications.map((notif) => (
-        <div key={notif.id} className={`notification notification-${notif.type}`}>
-          <div className="notification-content">
-            <span className="notification-icon">
+        <div key={notif.id} className={`${styles.notification} ${styles[`notification-${notif.type}`]}`}>
+          <div className={styles.notificationContent}>
+            <span className={styles.notificationIcon}>
               {notif.type === "success" && "✓"}
               {notif.type === "error" && "✕"}
               {notif.type === "warning" && "⚠"}
               {notif.type === "info" && "ℹ"}
             </span>
-            <span className="notification-message">{notif.message}</span>
+            <span className={styles.notificationMessage}>{notif.message}</span>
           </div>
           <button
-            className="notification-close"
+            className={styles.notificationClose}
             onClick={() => removeNotification(notif.id)}
           >
             ✕

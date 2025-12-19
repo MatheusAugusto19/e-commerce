@@ -1,38 +1,38 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Footer.scss';
+import styles from './Footer.module.scss';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="footer">
-      <div className="footer-content">
-        <div className="footer-section">
+    <footer className={styles.footer}>
+      <div className={styles.footerContent}>
+        <div className={styles.footerSection}>
           <h3>Sobre a Loja</h3>
           <p>
             Somos uma loja online dedicada a oferecermos os melhores produtos
             de tecnologia com preços competitivos e atendimento excepcional.
           </p>
-          <div className="social-links">
-            <a href="#" className="social-link" title="Facebook">
+          <div className={styles.socialLinks}>
+            <a href="#" className={styles.socialLink} title="Facebook">
               f
             </a>
-            <a href="#" className="social-link" title="Twitter">
+            <a href="#" className={styles.socialLink} title="Twitter">
               𝕏
             </a>
-            <a href="#" className="social-link" title="Instagram">
+            <a href="#" className={styles.socialLink} title="Instagram">
               📷
             </a>
-            <a href="#" className="social-link" title="LinkedIn">
+            <a href="#" className={styles.socialLink} title="LinkedIn">
               in
             </a>
           </div>
         </div>
 
-        <div className="footer-section">
+        <div className={styles.footerSection}>
           <h3>Menu Rápido</h3>
-          <ul className="footer-links">
+          <ul className={styles.footerLinks}>
             <li>
               <Link to="/">
                 🏠 Home
@@ -56,9 +56,9 @@ export default function Footer() {
           </ul>
         </div>
 
-        <div className="footer-section">
+        <div className={styles.footerSection}>
           <h3>Informações</h3>
-          <ul className="footer-links">
+          <ul className={styles.footerLinks}>
             <li>
               <a href="#">📋 Sobre Nós</a>
             </li>
@@ -77,9 +77,9 @@ export default function Footer() {
           </ul>
         </div>
 
-        <div className="footer-section">
+        <div className={styles.footerSection}>
           <h3>Contato</h3>
-          <ul className="contact-info">
+          <ul className={styles.contactInfo}>
             <li>
               <strong>Email:</strong>
               <a href="mailto:suporte@ecommerce.com">suporte@ecommerce.com</a>
@@ -95,28 +95,28 @@ export default function Footer() {
           </ul>
         </div>
 
-        <div className="footer-section">
+        <div className={styles.footerSection}>
           <h3>Formas de Pagamento</h3>
-          <div className="payment-methods">
-            <span className="payment-icon" title="Crédito">
+          <div className={styles.paymentMethods}>
+            <span className={styles.paymentIcon} title="Crédito">
               💳
             </span>
-            <span className="payment-icon" title="Débito">
+            <span className={styles.paymentIcon} title="Débito">
               🏧
             </span>
-            <span className="payment-icon" title="Pix">
+            <span className={styles.paymentIcon} title="Pix">
               📱
             </span>
-            <span className="payment-icon" title="Boleto">
+            <span className={styles.paymentIcon} title="Boleto">
               📄
             </span>
           </div>
         </div>
       </div>
 
-      <div className="footer-bottom">
-        <div className="footer-divider"></div>
-        <div className="footer-credits">
+      <div className={styles.footerBottom}>
+        <div className={styles.footerDivider}></div>
+        <div className={styles.footerCredits}>
           <p>
             © {currentYear} E-Commerce. Todos os direitos reservados. | Feito
             com ❤️ por{' '}
@@ -126,10 +126,10 @@ export default function Footer() {
               </a>
             </strong>
           </p>
-          <div className="footer-badges">
-            <span className="badge">✨ React 19</span>
-            <span className="badge">⚡ Vite</span>
-            <span className="badge">🎨 SCSS</span>
+          <div className={styles.footerBadges}>
+            <span className={styles.badge}>✨ React 19</span>
+            <span className={styles.badge}>⚡ Vite</span>
+            <span className={styles.badge}>🎨 SCSS</span>
           </div>
         </div>
       </div>

@@ -1,9 +1,12 @@
-import React from 'react';
-import { useProduct } from '../context/useProduct';
-import './Pagination.scss';
+import useStore from '../store/useStore';
+import styles from './Pagination.module.scss';
 
-export default function Pagination({ totalItems }) {
-  const { currentPage, totalPages, goToPage } = useProduct();
+export default function Pagination() {
+  const { currentPage, totalPages, goToPage } = useStore(state => ({
+    currentPage: state.pagination().currentPage,
+    totalPages: state.pagination().totalPages,
+    goToPage: state.goToPage,
+  }));
 
   if (totalPages <= 1) {
     return null; // Não exibir paginação se houver apenas uma página
@@ -30,9 +33,9 @@ export default function Pagination({ totalItems }) {
   const pageNumbers = getPageNumbers();
 
   return (
-    <div className="pagination-container">
+    <div className={styles.paginationContainer}>
       <button
-        className="pagination-btn prev-btn"
+        className={`${styles.paginationBtn} ${styles.prevBtn}`}
         onClick={() => goToPage(currentPage - 1)}
         disabled={currentPage === 1}
         title="Página anterior"
@@ -40,17 +43,17 @@ export default function Pagination({ totalItems }) {
         ← Anterior
       </button>
 
-      <div className="pagination-numbers">
+      <div className={styles.paginationNumbers}>
         {/* Botão para primeira página se não estiver visível */}
         {pageNumbers[0] > 1 && (
           <>
             <button
-              className="pagination-btn page-btn"
+              className={`${styles.paginationBtn} ${styles.pageBtn}`}
               onClick={() => goToPage(1)}
             >
               1
             </button>
-            {pageNumbers[0] > 2 && <span className="pagination-ellipsis">...</span>}
+            {pageNumbers[0] > 2 && <span className={styles.paginationEllipsis}>...</span>}
           </>
         )}
 
@@ -58,7 +61,7 @@ export default function Pagination({ totalItems }) {
         {pageNumbers.map((page) => (
           <button
             key={page}
-            className={`pagination-btn page-btn ${page === currentPage ? 'active' : ''}`}
+            className={`${styles.paginationBtn} ${styles.pageBtn} ${page === currentPage ? styles.active : ''}`}
             onClick={() => goToPage(page)}
           >
             {page}
@@ -69,10 +72,10 @@ export default function Pagination({ totalItems }) {
         {pageNumbers[pageNumbers.length - 1] < totalPages && (
           <>
             {pageNumbers[pageNumbers.length - 1] < totalPages - 1 && (
-              <span className="pagination-ellipsis">...</span>
+              <span className={styles.paginationEllipsis}>...</span>
             )}
             <button
-              className="pagination-btn page-btn"
+              className={`${styles.paginationBtn} ${styles.pageBtn}`}
               onClick={() => goToPage(totalPages)}
             >
               {totalPages}
@@ -82,7 +85,7 @@ export default function Pagination({ totalItems }) {
       </div>
 
       <button
-        className="pagination-btn next-btn"
+        className={`${styles.paginationBtn} ${styles.nextBtn}`}
         onClick={() => goToPage(currentPage + 1)}
         disabled={currentPage === totalPages}
         title="Próxima página"
@@ -90,7 +93,7 @@ export default function Pagination({ totalItems }) {
         Próximo →
       </button>
 
-      <span className="pagination-info">
+      <span className={styles.paginationInfo}>
         Página {currentPage} de {totalPages}
       </span>
     </div>

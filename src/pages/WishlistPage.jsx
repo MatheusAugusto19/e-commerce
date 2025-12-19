@@ -1,14 +1,9 @@
-import React from 'react';
-import { useWishlist } from '../context/useWishlist';
-import { useCart } from '../context/useCart';
-import { useNotification } from '../context/useNotification';
+import useStore from '../store/useStore';
 import ProductCard from '../components/ProductCard';
-import './WishlistPage.scss';
+import styles from './WishlistPage.module.scss';
 
 export default function WishlistPage() {
-  const { wishlistItems, clearWishlist } = useWishlist();
-  const { addToCart } = useCart();
-  const { addNotification } = useNotification();
+  const { wishlistItems, clearWishlist, addToCart, addNotification } = useStore();
 
   const handleAddToCart = (product) => {
     addToCart(product);
@@ -32,12 +27,12 @@ export default function WishlistPage() {
 
   if (wishlistItems.length === 0) {
     return (
-      <main className="wishlist-page">
-        <div className="empty-wishlist">
-          <div className="empty-icon">🤍</div>
+      <main className={styles.wishlistPage}>
+        <div className={styles.emptyWishlist}>
+          <div className={styles.emptyIcon}>🤍</div>
           <h1>Sua lista de favoritos está vazia</h1>
           <p>Adicione produtos aos seus favoritos para vê-los aqui</p>
-          <button onClick={goHome} className="continue-shopping-btn">
+          <button onClick={goHome} className={styles.continueShoppingBtn}>
             ← Voltar para loja
           </button>
         </div>
@@ -46,19 +41,19 @@ export default function WishlistPage() {
   }
 
   return (
-    <main className="wishlist-page">
-      <div className="wishlist-container">
-        <div className="wishlist-header">
+    <main className={styles.wishlistPage}>
+      <div className={styles.wishlistContainer}>
+        <div className={styles.wishlistHeader}>
           <h1>❤️ Meus Favoritos</h1>
-          <div className="wishlist-stats">
-            <span className="wishlist-count">{wishlistItems.length} produtos</span>
-            <button onClick={handleClearWishlist} className="clear-btn">
+          <div className={styles.wishlistStats}>
+            <span className={styles.wishlistCount}>{wishlistItems.length} produtos</span>
+            <button onClick={handleClearWishlist} className={styles.clearBtn}>
               🗑️ Limpar Lista
             </button>
           </div>
         </div>
 
-        <div className="wishlist-grid">
+        <div className={styles.wishlistGrid}>
           {wishlistItems.map((product) => (
             <ProductCard
               key={product.id}
@@ -69,8 +64,8 @@ export default function WishlistPage() {
           ))}
         </div>
 
-        <div className="wishlist-footer">
-          <button onClick={goHome} className="back-btn">
+        <div className={styles.wishlistFooter}>
+          <button onClick={goHome} className={styles.backBtn}>
             ← Continuar Comprando
           </button>
           {wishlistItems.length > 0 && (
@@ -85,7 +80,7 @@ export default function WishlistPage() {
                   2000
                 );
               }}
-              className="add-all-btn"
+              className={styles.addAllBtn}
             >
               🛒 Adicionar Tudo ao Carrinho
             </button>

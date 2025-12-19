@@ -1,35 +1,31 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useCart } from "../context/useCart";
-import { useWishlist } from "../context/useWishlist";
-import { useAuth } from "../context/useAuth";
+import useStore from "../store/useStore";
 import SearchBar from "./SearchBar";
 import LoginRegisterModal from "./LoginRegisterModal";
-import "./Header.scss";
+import styles from "./Header.module.scss";
 
 export default function Header() {
-  const { getTotalItems } = useCart();
-  const { getTotalWishlistItems } = useWishlist();
-  const { user, logout, isAuthenticated } = useAuth();
+  const { getTotalItems, getTotalWishlistItems, user, logout, isAuthenticated } = useStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <header className="header">
-      <div className="header-container">
-        <Link to="/" className="logo-link">
-          <div className="logo">
+    <header className={styles.header}>
+      <div className={styles.headerContainer}>
+        <Link to="/" className={styles.logoLink}>
+          <div className={styles.logo}>
             <h1>🛍️ E-Commerce</h1>
           </div>
         </Link>
         
         <SearchBar />
         
-        <div className="header-actions">
+        <div className={styles.headerActions}>
           {isAuthenticated ? (
             <>
-              <div className="user-info">
-                <span className="user-greeting">👤 {user?.name}</span>
-                <button onClick={logout} className="logout-btn" title="Sair">
+              <div className={styles.userInfo}>
+                <span className={styles.userGreeting}>👤 {user?.name}</span>
+                <button onClick={logout} className={styles.logoutBtn} title="Sair">
                   Sair
                 </button>
               </div>
@@ -37,23 +33,23 @@ export default function Header() {
           ) : (
             <button
               onClick={() => setIsModalOpen(true)}
-              className="login-btn"
+              className={styles.loginBtn}
               title="Entrar ou criar conta"
             >
               Entrar
             </button>
           )}
 
-          <Link to="/wishlist" className="wishlist-btn" title="Favoritos">
-            <span className="wishlist-icon">❤️</span>
-            <span className="wishlist-count">{getTotalWishlistItems()}</span>
+          <Link to="/wishlist" className={styles.wishlistBtn} title="Favoritos">
+            <span className={styles.wishlistIcon}>❤️</span>
+            <span className={styles.wishlistCount}>{getTotalWishlistItems()}</span>
           </Link>
-          <Link to="/orders" className="orders-btn" title="Histórico de pedidos">
-            <span className="orders-icon">📦</span>
+          <Link to="/orders" className={styles.ordersBtn} title="Histórico de pedidos">
+            <span className={styles.ordersIcon}>📦</span>
           </Link>
-          <Link to="/cart" className="cart-btn">
-            <span className="cart-icon">🛒</span>
-            <span className="cart-count">{getTotalItems()}</span>
+          <Link to="/cart" className={styles.cartBtn}>
+            <span className={styles.cartIcon}>🛒</span>
+            <span className={styles.cartCount}>{getTotalItems()}</span>
           </Link>
         </div>
       </div>

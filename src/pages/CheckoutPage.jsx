@@ -1,9 +1,5 @@
-import React, { useState } from "react";
-import { useCart } from "../context/useCart";
-import { useNotification } from "../context/useNotification";
-import { useOrder } from "../context/useOrder";
-import { useCoupon } from "../context/useCoupon";
-import { useFreight } from "../context/useFreight";
+import { useState } from "react";
+import useStore from "../store/useStore";
 import CouponSection from "../components/CouponSection";
 import FreightSelector from "../components/FreightSelector";
 import {
@@ -13,14 +9,30 @@ import {
   validateAllPaymentData,
   maskCardNumber,
 } from "../utils/paymentValidation";
-import "./CheckoutPage.scss";
+import styles from "./CheckoutPage.module.scss";
 
 export default function CheckoutPage() {
-  const { cartItems, getTotal, clearCart } = useCart();
-  const { addNotification } = useNotification();
-  const { addOrder } = useOrder();
-  const { appliedCoupon, calculateDiscount } = useCoupon();
-  const { selectedFreight, selectFreight } = useFreight();
+  const {
+    cartItems,
+    getTotal,
+    clearCart,
+    addNotification,
+    addOrder,
+    appliedCoupon,
+    calculateDiscount,
+    selectedFreight,
+    selectFreight,
+  } = useStore((state) => ({
+    cartItems: state.cartItems,
+    getTotal: state.getTotal,
+    clearCart: state.clearCart,
+    addNotification: state.addNotification,
+    addOrder: state.addOrder,
+    appliedCoupon: state.appliedCoupon,
+    calculateDiscount: state.calculateDiscount,
+    selectedFreight: state.selectedFreight,
+    selectFreight: state.selectFreight,
+  }));
   const [step, setStep] = useState(1); // 1: Endereço, 2: Pagamento, 3: Confirmação
   const [formData, setFormData] = useState({
     name: "",
@@ -54,9 +66,11 @@ export default function CheckoutPage() {
     // Aplicar máscaras conforme o campo
     if (name === "cardNumber") {
       formattedValue = formatCardNumber(value);
-    } else if (name === "cardExpiry") {
+    }
+    else if (name === "cardExpiry") {
       formattedValue = formatCardExpiry(value);
-    } else if (name === "cardCVC") {
+    }
+    else if (name === "cardCVC") {
       formattedValue = formatCVC(value);
     }
 
@@ -135,11 +149,11 @@ export default function CheckoutPage() {
 
   if (cartItems.length === 0 && step !== 3) {
     return (
-      <main className="checkout-page">
-        <div className="empty-checkout">
+      <main className={styles.checkoutPage}>
+        <div className={styles.emptyCheckout}>
           <h1>Seu carrinho está vazio</h1>
           <p>Adicione produtos antes de fazer checkout</p>
-          <button onClick={goBack} className="back-btn">
+          <button onClick={goBack} className={styles.backBtn}>
             ← Voltar para carrinho
           </button>
         </div>
@@ -149,19 +163,19 @@ export default function CheckoutPage() {
 
   if (step === 3) {
     return (
-      <main className="checkout-page">
-        <div className="confirmation">
-          <div className="success-icon">✅</div>
+      <main className={styles.checkoutPage}>
+        <div className={styles.confirmation}>
+          <div className={styles.successIcon}>✅</div>
           <h1>Pedido Confirmado!</h1>
-          <p className="order-number">Número do pedido: {orderNumber}</p>
-          <p className="order-message">
+          <p className={styles.orderNumber}>Número do pedido: {orderNumber}</p>
+          <p className={styles.orderMessage}>
             Seu pedido foi recebido e será processado em breve.
           </p>
-          <div className="order-details">
+          <div className={styles.orderDetails}>
             <p>Você receberá um email de confirmação em breve.</p>
             <p>Tempo de entrega: 5-7 dias úteis</p>
           </div>
-          <button onClick={() => (window.location.hash = "")} className="home-btn">
+          <button onClick={() => (window.location.hash = "")} className={styles.homeBtn}>
             ← Voltar para Home
           </button>
         </div>
@@ -170,33 +184,33 @@ export default function CheckoutPage() {
   }
 
   return (
-    <main className="checkout-page">
-      <div className="checkout-container">
+    <main className={styles.checkoutPage}>
+      <div className={styles.checkoutContainer}>
         <h1>Checkout</h1>
 
         {/* Indicador de etapas */}
-        <div className="steps-indicator">
-          <div className={`step ${step >= 1 ? "active" : ""}`}>
+        <div className={styles.stepsIndicator}>
+          <div className={`${styles.step} ${step >= 1 ? styles.active : ""}`}>
             <span>1</span>
             <p>Endereço</p>
           </div>
-          <div className={`step ${step >= 2 ? "active" : ""}`}>
+          <div className={`${styles.step} ${step >= 2 ? styles.active : ""}`}>
             <span>2</span>
             <p>Pagamento</p>
           </div>
-          <div className={`step ${step >= 3 ? "active" : ""}`}>
+          <div className={`${styles.step} ${step >= 3 ? styles.active : ""}`}>
             <span>3</span>
             <p>Confirmação</p>
           </div>
         </div>
 
-        <div className="checkout-content">
+        <div className={styles.checkoutContent}>
           {/* Formulário de Endereço */}
           {step === 1 && (
-            <div className="form-section">
+            <div className={styles.formSection}>
               <h2>Endereço de Entrega</h2>
               <form>
-                <div className="form-row">
+                <div className={styles.formRow}>
                   <input
                     type="text"
                     name="name"
@@ -213,7 +227,7 @@ export default function CheckoutPage() {
                   />
                 </div>
 
-                <div className="form-row">
+                <div className={styles.formRow}>
                   <input
                     type="tel"
                     name="phone"
@@ -223,7 +237,7 @@ export default function CheckoutPage() {
                   />
                 </div>
 
-                <div className="form-row">
+                <div className={styles.formRow}>
                   <input
                     type="text"
                     name="street"
@@ -241,7 +255,7 @@ export default function CheckoutPage() {
                   />
                 </div>
 
-                <div className="form-row">
+                <div className={styles.formRow}>
                   <input
                     type="text"
                     name="complement"
@@ -251,7 +265,7 @@ export default function CheckoutPage() {
                   />
                 </div>
 
-                <div className="form-row">
+                <div className={styles.formRow}>
                   <input
                     type="text"
                     name="city"
@@ -286,14 +300,14 @@ export default function CheckoutPage() {
                 )}
               </form>
 
-              <div className="button-group">
-                <button onClick={goBack} className="back-btn">
+              <div className={styles.buttonGroup}>
+                <button onClick={goBack} className={styles.backBtn}>
                   ← Voltar
                 </button>
                 <button
                   onClick={() => setStep(2)}
                   disabled={!isAddressValid()}
-                  className="next-btn"
+                  className={styles.nextBtn}
                 >
                   Próximo →
                 </button>
@@ -303,27 +317,27 @@ export default function CheckoutPage() {
 
           {/* Formulário de Pagamento */}
           {step === 2 && (
-            <div className="form-section">
+            <div className={styles.formSection}>
               <h2>Dados de Pagamento</h2>
               <form>
-                <div className="form-row">
-                  <div className="form-group">
+                <div className={styles.formRow}>
+                  <div className={styles.formGroup}>
                     <input
                       type="text"
                       name="cardName"
                       placeholder="Nome no Cartão"
                       value={paymentData.cardName}
                       onChange={handlePaymentChange}
-                      className={paymentErrors.cardName ? 'input-error' : ''}
+                      className={paymentErrors.cardName ? styles.inputError : ''}
                     />
                     {paymentErrors.cardName && (
-                      <span className="error-message">⚠️ {paymentErrors.cardName}</span>
+                      <span className={styles.errorMessage}>⚠️ {paymentErrors.cardName}</span>
                     )}
                   </div>
                 </div>
 
-                <div className="form-row">
-                  <div className="form-group">
+                <div className={styles.formRow}>
+                  <div className={styles.formGroup}>
                     <input
                       type="text"
                       name="cardNumber"
@@ -331,16 +345,16 @@ export default function CheckoutPage() {
                       value={paymentData.cardNumber}
                       onChange={handlePaymentChange}
                       maxLength="19"
-                      className={paymentErrors.cardNumber ? 'input-error' : ''}
+                      className={paymentErrors.cardNumber ? styles.inputError : ''}
                     />
                     {paymentErrors.cardNumber && (
-                      <span className="error-message">⚠️ {paymentErrors.cardNumber}</span>
+                      <span className={styles.errorMessage}>⚠️ {paymentErrors.cardNumber}</span>
                     )}
                   </div>
                 </div>
 
-                <div className="form-row">
-                  <div className="form-group">
+                <div className={styles.formRow}>
+                  <div className={styles.formGroup}>
                     <input
                       type="text"
                       name="cardExpiry"
@@ -348,13 +362,13 @@ export default function CheckoutPage() {
                       value={paymentData.cardExpiry}
                       onChange={handlePaymentChange}
                       maxLength="5"
-                      className={paymentErrors.cardExpiry ? 'input-error' : ''}
+                      className={paymentErrors.cardExpiry ? styles.inputError : ''}
                     />
                     {paymentErrors.cardExpiry && (
-                      <span className="error-message">⚠️ {paymentErrors.cardExpiry}</span>
+                      <span className={styles.errorMessage}>⚠️ {paymentErrors.cardExpiry}</span>
                     )}
                   </div>
-                  <div className="form-group">
+                  <div className={styles.formGroup}>
                     <input
                       type="text"
                       name="cardCVC"
@@ -362,11 +376,11 @@ export default function CheckoutPage() {
                       value={paymentData.cardCVC}
                       onChange={handlePaymentChange}
                       maxLength="3"
-                      className={paymentErrors.cardCVC ? 'input-error' : ''}
+                      className={paymentErrors.cardCVC ? styles.inputError : ''}
                       style={{ maxWidth: "100px" }}
                     />
                     {paymentErrors.cardCVC && (
-                      <span className="error-message">⚠️ {paymentErrors.cardCVC}</span>
+                      <span className={styles.errorMessage}>⚠️ {paymentErrors.cardCVC}</span>
                     )}
                   </div>
                 </div>
@@ -374,13 +388,13 @@ export default function CheckoutPage() {
 
               <CouponSection />
 
-              <div className="button-group">
-                <button onClick={() => setStep(1)} className="back-btn">
+              <div className={styles.buttonGroup}>
+                <button onClick={() => setStep(1)} className={styles.backBtn}>
                   ← Voltar
                 </button>
                 <button 
                   onClick={handlePlaceOrder} 
-                  className="next-btn"
+                  className={styles.nextBtn}
                   disabled={!isPaymentValid()}
                 >
                   Confirmar Pedido
@@ -390,37 +404,37 @@ export default function CheckoutPage() {
           )}
 
           {/* Resumo do Pedido */}
-          <div className="order-summary">
+          <div className={styles.orderSummary}>
             <h2>Resumo do Pedido</h2>
-            <div className="summary-items">
+            <div className={styles.summaryItems}>
               {cartItems.map((item) => (
-                <div key={item.id} className="summary-item">
-                  <span className="item-name">
+                <div key={item.id} className={styles.summaryItem}>
+                  <span className={styles.itemName}>
                     {item.name} x{item.quantity}
                   </span>
-                  <span className="item-price">
+                  <span className={styles.itemPrice}>
                     R$ {(item.price * item.quantity).toFixed(2)}
                   </span>
                 </div>
               ))}
             </div>
 
-            <div className="summary-totals">
-              <div className="total-row">
+            <div className={styles.summaryTotals}>
+              <div className={styles.totalRow}>
                 <span>Subtotal:</span>
                 <span>R$ {getTotal().toFixed(2)}</span>
               </div>
-              <div className="total-row">
+              <div className={styles.totalRow}>
                 <span>Frete:</span>
                 <span>{selectedFreight ? `R$ ${selectedFreight.price.toFixed(2)}` : 'Não selecionado'}</span>
               </div>
               {appliedCoupon && calculateDiscount() > 0 && (
-                <div className="total-row discount-row">
+                <div className={`${styles.totalRow} ${styles.discountRow}`}>
                   <span>Desconto ({appliedCoupon.code}):</span>
                   <span>-R$ {calculateDiscount().toFixed(2)}</span>
                 </div>
               )}
-              <div className="total-row final">
+              <div className={`${styles.totalRow} ${styles.final}`}>
                 <span>Total:</span>
                 <span>R$ {(getTotal() - calculateDiscount() + (selectedFreight?.price || 0)).toFixed(2)}</span>
               </div>

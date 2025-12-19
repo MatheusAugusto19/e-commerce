@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { useAuth } from "../context/useAuth";
-import "./LoginRegisterModal.scss";
+import { useState } from "react";
+import useStore from "../store/useStore";
+import styles from "./LoginRegisterModal.module.scss";
 
 export default function LoginRegisterModal({ isOpen, onClose }) {
-  const { login, register } = useAuth();
+  const { login, register } = useStore();
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [formData, setFormData] = useState({
     name: "",
@@ -56,15 +56,15 @@ export default function LoginRegisterModal({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="close-btn" onClick={onClose}>✕</button>
+    <div className={styles.modalOverlay} onClick={onClose}>
+      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+        <button className={styles.closeBtn} onClick={onClose}>✕</button>
 
         <h2>{isLoginMode ? "Entrar" : "Criar Conta"}</h2>
 
-        <form onSubmit={handleSubmit} className="auth-form">
+        <form onSubmit={handleSubmit} className={styles.authForm}>
           {!isLoginMode && (
-            <div className="form-group">
+            <div className={styles.formGroup}>
               <label htmlFor="name">Nome Completo</label>
               <input
                 type="text"
@@ -78,7 +78,7 @@ export default function LoginRegisterModal({ isOpen, onClose }) {
             </div>
           )}
 
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label htmlFor="email">Email</label>
             <input
               type="email"
@@ -91,7 +91,7 @@ export default function LoginRegisterModal({ isOpen, onClose }) {
             />
           </div>
 
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label htmlFor="password">Senha</label>
             <input
               type="password"
@@ -105,7 +105,7 @@ export default function LoginRegisterModal({ isOpen, onClose }) {
           </div>
 
           {!isLoginMode && (
-            <div className="form-group">
+            <div className={styles.formGroup}>
               <label htmlFor="confirmPassword">Confirmar Senha</label>
               <input
                 type="password"
@@ -119,18 +119,18 @@ export default function LoginRegisterModal({ isOpen, onClose }) {
             </div>
           )}
 
-          {error && <div className="error-message">{error}</div>}
+          {error && <div className={styles.errorMessage}>{error}</div>}
 
           <button
             type="submit"
-            className="submit-btn"
+            className={styles.submitBtn}
             disabled={isLoading}
           >
             {isLoading ? "Processando..." : isLoginMode ? "Entrar" : "Criar Conta"}
           </button>
         </form>
 
-        <div className="mode-toggle">
+        <div className={styles.modeToggle}>
           <p>
             {isLoginMode ? "Não tem conta?" : "Já tem conta?"}
             <button
@@ -145,7 +145,7 @@ export default function LoginRegisterModal({ isOpen, onClose }) {
                   confirmPassword: "",
                 });
               }}
-              className="toggle-btn"
+              className={styles.toggleBtn}
             >
               {isLoginMode ? "Criar conta" : "Entrar"}
             </button>

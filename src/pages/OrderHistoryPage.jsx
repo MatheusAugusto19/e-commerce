@@ -1,9 +1,12 @@
-import React, { useState } from "react";
-import { useOrder } from "../context/useOrder";
-import "./OrderHistoryPage.scss";
+import { useState } from "react";
+import useStore from "../store/useStore";
+import styles from "./OrderHistoryPage.module.scss";
 
 export default function OrderHistoryPage() {
-  const { orders, getOrderById } = useOrder();
+  const { orders, getOrderById } = useStore((state) => ({
+    orders: state.orders,
+    getOrderById: state.getOrderById,
+  }));
   const [selectedOrderId, setSelectedOrderId] = useState(null);
 
   const selectedOrder = selectedOrderId ? getOrderById(selectedOrderId) : null;
@@ -11,13 +14,13 @@ export default function OrderHistoryPage() {
   const getStatusColor = (status) => {
     switch (status) {
       case "Processando":
-        return "status-processing";
+        return styles.statusProcessing;
       case "Enviado":
-        return "status-shipped";
+        return styles.statusShipped;
       case "Entregue":
-        return "status-delivered";
+        return styles.statusDelivered;
       case "Cancelado":
-        return "status-cancelled";
+        return styles.statusCancelled;
       default:
         return "";
     }
@@ -40,11 +43,11 @@ export default function OrderHistoryPage() {
 
   if (orders.length === 0) {
     return (
-      <main className="order-history-page">
-        <div className="empty-orders">
+      <main className={styles.orderHistoryPage}>
+        <div className={styles.emptyOrders}>
           <h1>📦 Histórico de Pedidos</h1>
           <p>Você ainda não realizou nenhum pedido.</p>
-          <a href="/" className="continue-shopping-btn">
+          <a href="/" className={styles.continueShoppingBtn}>
             ← Continuar Comprando
           </a>
         </div>
@@ -53,40 +56,40 @@ export default function OrderHistoryPage() {
   }
 
   return (
-    <main className="order-history-page">
-      <div className="orders-container">
+    <main className={styles.orderHistoryPage}>
+      <div className={styles.ordersContainer}>
         <h1>📦 Histórico de Pedidos</h1>
 
-        <div className="orders-content">
+        <div className={styles.ordersContent}>
           {/* Lista de Pedidos */}
-          <div className="orders-list">
-            <div className="orders-header">
+          <div className={styles.ordersList}>
+            <div className={styles.ordersHeader}>
               <h2>Meus Pedidos</h2>
-              <span className="orders-count">Total: {orders.length}</span>
+              <span className={styles.ordersCount}>Total: {orders.length}</span>
             </div>
 
-            <div className="orders-items">
+            <div className={styles.ordersItems}>
               {orders.map((order) => (
                 <div
                   key={order.id}
-                  className={`order-item ${selectedOrderId === order.id ? "active" : ""}`}
+                  className={`${styles.orderItem} ${selectedOrderId === order.id ? styles.active : ""}`}
                   onClick={() => setSelectedOrderId(order.id)}
                 >
-                  <div className="order-item-header">
-                    <div className="order-id-date">
-                      <span className="order-id">{order.id}</span>
-                      <span className="order-date">{order.date}</span>
+                  <div className={styles.orderItemHeader}>
+                    <div className={styles.orderIdDate}>
+                      <span className={styles.orderId}>{order.id}</span>
+                      <span className={styles.orderDate}>{order.date}</span>
                     </div>
-                    <span className={`order-status ${getStatusColor(order.status)}`}>
+                    <span className={`${styles.orderStatus} ${getStatusColor(order.status)}`}>
                       {getStatusIcon(order.status)} {order.status}
                     </span>
                   </div>
 
-                  <div className="order-item-summary">
-                    <span className="order-items-count">
+                  <div className={styles.orderItemSummary}>
+                    <span className={styles.orderItemsCount}>
                       {order.items.length} item(ns)
                     </span>
-                    <span className="order-total">R$ {order.total.toFixed(2)}</span>
+                    <span className={styles.orderTotal}>R$ {order.total.toFixed(2)}</span>
                   </div>
                 </div>
               ))}
@@ -95,11 +98,11 @@ export default function OrderHistoryPage() {
 
           {/* Detalhes do Pedido */}
           {selectedOrder && (
-            <div className="order-details">
-              <div className="details-header">
+            <div className={styles.orderDetails}>
+              <div className={styles.detailsHeader}>
                 <h2>Detalhes do Pedido</h2>
                 <button
-                  className="close-details"
+                  className={styles.closeDetails}
                   onClick={() => setSelectedOrderId(null)}
                 >
                   ✕
@@ -107,40 +110,39 @@ export default function OrderHistoryPage() {
               </div>
 
               {/* Status Timeline */}
-              <div className="order-timeline">
-                <div className={`timeline-step ${selectedOrder.status !== "Processando" ? "completed" : "active"}`}>
-                  <div className="timeline-circle">📦</div>
-                  <div className="timeline-label">Pedido Confirmado</div>
+              <div className={styles.orderTimeline}>
+                <div className={`${styles.timelineStep} ${selectedOrder.status !== "Processando" ? styles.completed : styles.active}`}>
+                  <div className={styles.timelineCircle}>📦</div>
+                  <div className={styles.timelineLabel}>Pedido Confirmado</div>
                 </div>
-                <div className={`timeline-step ${selectedOrder.status === "Entregue" ? "completed" : selectedOrder.status === "Enviado" ? "active" : ""}`}>
-                  <div className="timeline-circle">🚚</div>
-                  <div className="timeline-label">Em Trânsito</div>
+                <div className={`${styles.timelineStep} ${selectedOrder.status === "Entregue" ? styles.completed : selectedOrder.status === "Enviado" ? styles.active : ""}`}>
+                  <div className={styles.timelineCircle}>🚚</div>
+                  <div className={styles.timelineLabel}>Em Trânsito</div>
                 </div>
-                <div className={`timeline-step ${selectedOrder.status === "Entregue" ? "completed" : ""}`}>
-                  <div className="timeline-circle">✅</div>
-                  <div className="timeline-label">Entregue</div>
+                <div className={`${styles.timelineStep} ${selectedOrder.status === "Entregue" ? styles.completed : ""}`}>
+                  <div className={styles.timelineCircle}>✅</div>
+                  <div className={styles.timelineLabel}>Entregue</div>
                 </div>
               </div>
 
               {/* Informações do Pedido */}
-              <div className="details-section">
+              <div className={styles.detailsSection}>
                 <h3>Informações do Pedido</h3>
-                <div className="info-grid">
-                  <div className="info-item">
-                    <span className="info-label">Número do Pedido:</span>
-                    <span className="info-value">{selectedOrder.id}</span>
+                <div className={styles.infoGrid}>
+                  <div className={styles.infoItem}>
+                    <span className={styles.infoLabel}>Número do Pedido:</span>
+                    <span className={styles.infoValue}>{selectedOrder.id}</span>
                   </div>
-                  <div className="info-item">
-                    <span className="info-label">Data:</span>
-                    <span className="info-value">{selectedOrder.date}</span>
+                  <div className={styles.infoItem}>
+                    <span className={styles.infoLabel}>Data:</span>
+                    <span className={styles.infoValue}>{selectedOrder.date}</span>
                   </div>
-                  <div className="info-item">
-                    <span className="info-label">Hora:</span>
-                    <span className="info-value">{selectedOrder.time}</span>
+                  <div className={styles.infoItem}>
+                    <span className={styles.infoLabel}>Hora:</span>
+                    <span className={styles.infoValue}>{selectedOrder.time}</span>
                   </div>
-                  <div className="info-item">
-                    <span className="info-label">Status:</span>
-                    <span className={`info-value status ${getStatusColor(selectedOrder.status)}`}>
+                  <div className={styles.infoItem}>
+                    <span className={`${styles.infoValue} ${styles.status} ${getStatusColor(selectedOrder.status)}`}>
                       {getStatusIcon(selectedOrder.status)} {selectedOrder.status}
                     </span>
                   </div>
@@ -148,42 +150,42 @@ export default function OrderHistoryPage() {
               </div>
 
               {/* Endereço de Entrega */}
-              <div className="details-section">
+              <div className={styles.detailsSection}>
                 <h3>Endereço de Entrega</h3>
-                <div className="address-box">
+                <div className={styles.addressBox}>
                   <p>
                     <strong>{selectedOrder.shippingInfo.name}</strong>
                   </p>
                   <p>
-                    {selectedOrder.shippingInfo.street},{" "}
+                    {selectedOrder.shippingInfo.street}, {" "}
                     {selectedOrder.shippingInfo.number}
                   </p>
                   {selectedOrder.shippingInfo.complement && (
                     <p>{selectedOrder.shippingInfo.complement}</p>
                   )}
                   <p>
-                    {selectedOrder.shippingInfo.city},{" "}
-                    {selectedOrder.shippingInfo.state} -{" "}
+                    {selectedOrder.shippingInfo.city}, {" "}
+                    {selectedOrder.shippingInfo.state} - {" "}
                     {selectedOrder.shippingInfo.zipcode}
                   </p>
                 </div>
               </div>
 
               {/* Itens do Pedido */}
-              <div className="details-section">
+              <div className={styles.detailsSection}>
                 <h3>Itens do Pedido</h3>
-                <div className="order-items-detail">
+                <div className={styles.orderItemsDetail}>
                   {selectedOrder.items.map((item, idx) => (
-                    <div key={idx} className="item-detail">
+                    <div key={idx} className={styles.itemDetail}>
                       <img src={item.image} alt={item.name} />
-                      <div className="item-info">
+                      <div className={styles.itemInfo}>
                         <h4>{item.name}</h4>
                         <p>Quantidade: {item.quantity}</p>
-                        <p className="item-price">
+                        <p className={styles.itemPrice}>
                           R$ {item.price.toFixed(2)}
                         </p>
                       </div>
-                      <div className="item-total">
+                      <div className={styles.itemTotal}>
                         R$ {(item.price * item.quantity).toFixed(2)}
                       </div>
                     </div>
@@ -192,18 +194,18 @@ export default function OrderHistoryPage() {
               </div>
 
               {/* Resumo Financeiro */}
-              <div className="details-section">
+              <div className={styles.detailsSection}>
                 <h3>Resumo Financeiro</h3>
-                <div className="financial-summary">
-                  <div className="summary-row">
+                <div className={styles.financialSummary}>
+                  <div className={styles.summaryRow}>
                     <span>Subtotal:</span>
                     <span>R$ {selectedOrder.total.toFixed(2)}</span>
                   </div>
-                  <div className="summary-row">
+                  <div className={styles.summaryRow}>
                     <span>Frete:</span>
                     <span>Grátis</span>
                   </div>
-                  <div className="summary-row total">
+                  <div className={`${styles.summaryRow} ${styles.total}`}>
                     <span>Total:</span>
                     <span>R$ {selectedOrder.total.toFixed(2)}</span>
                   </div>
@@ -211,11 +213,11 @@ export default function OrderHistoryPage() {
               </div>
 
               {/* Ações */}
-              <div className="details-actions">
-                <button className="action-btn primary">
+              <div className={styles.detailsActions}>
+                <button className={`${styles.actionBtn} ${styles.primary}`}>
                   📧 Rastrear Pedido
                 </button>
-                <button className="action-btn secondary">
+                <button className={`${styles.actionBtn} ${styles.secondary}`}>
                   🔄 Repetir Pedido
                 </button>
               </div>

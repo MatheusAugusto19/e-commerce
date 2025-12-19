@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
-import { useCoupon } from '../context/useCoupon';
-import { useNotification } from '../context/useNotification';
-import './CouponSection.scss';
+import { useState } from 'react';
+import useStore from '../store/useStore';
+import styles from './CouponSection.module.scss';
 
 export default function CouponSection({ cartTotal }) {
-  const { appliedCoupon, applyCoupon, removeCoupon, getAvailableCoupons, calculateDiscount } =
-    useCoupon();
-  const { addNotification } = useNotification();
+  const { appliedCoupon, applyCoupon, removeCoupon, getAvailableCoupons, calculateDiscount, addNotification } =
+    useStore(state => ({
+      appliedCoupon: state.appliedCoupon,
+      applyCoupon: state.applyCoupon,
+      removeCoupon: state.removeCoupon,
+      getAvailableCoupons: state.getAvailableCoupons,
+      calculateDiscount: state.calculateDiscount,
+      addNotification: state.addNotification,
+    }));
   const [couponCode, setCouponCode] = useState('');
   const [showCoupons, setShowCoupons] = useState(false);
 
@@ -50,23 +55,23 @@ export default function CouponSection({ cartTotal }) {
   const availableCoupons = getAvailableCoupons();
 
   return (
-    <div className="coupon-section">
-      <div className="coupon-form">
+    <div className={styles.couponSection}>
+      <div className={styles.couponForm}>
         <h3>🎟️ Cupom de Desconto</h3>
         <form onSubmit={handleApplyCoupon}>
-          <div className="coupon-input-group">
+          <div className={styles.couponInputGroup}>
             <input
               type="text"
               placeholder="Digite seu código de cupom"
               value={couponCode}
               onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
               disabled={appliedCoupon !== null}
-              className="coupon-input"
+              className={styles.couponInput}
             />
             <button
               type="submit"
               disabled={appliedCoupon !== null}
-              className="coupon-apply-btn"
+              className={styles.couponApplyBtn}
             >
               Aplicar
             </button>
@@ -74,38 +79,40 @@ export default function CouponSection({ cartTotal }) {
         </form>
 
         <button
-          className="show-coupons-btn"
+          className={styles.showCouponsBtn}
           onClick={() => setShowCoupons(!showCoupons)}
         >
           {showCoupons ? '▼ Ocultar cupons disponíveis' : '▶ Ver cupons disponíveis'}
         </button>
 
         {showCoupons && (
-          <div className="coupons-list">
-            <p className="coupons-title">Cupons disponíveis:</p>
+          <div className={styles.couponsList}>
+            <p className={styles.couponsTitle}>Cupons disponíveis:</p>
             {availableCoupons.length === 0 ? (
-              <p className="no-coupons">Nenhum cupom disponível no momento</p>
+              <p className={styles.noCoupons}>Nenhum cupom disponível no momento</p>
             ) : (
               availableCoupons.map((coupon) => (
                 <div
                   key={coupon.code}
-                  className={`coupon-card ${appliedCoupon?.code === coupon.code ? 'applied' : ''}`}
+                  className={`${styles.couponCard} ${
+                    appliedCoupon?.code === coupon.code ? styles.applied : ''
+                  }`}
                 >
-                  <div className="coupon-header">
-                    <span className="coupon-code">{coupon.code}</span>
-                    <span className="coupon-badge">
+                  <div className={styles.couponHeader}>
+                    <span className={styles.couponCode}>{coupon.code}</span>
+                    <span className={styles.couponBadge}>
                       {coupon.type === 'percentage'
                         ? `${coupon.discount}%`
                         : `R$ ${coupon.discount}`}
                     </span>
                   </div>
-                  <p className="coupon-description">{coupon.description}</p>
-                  <div className="coupon-footer">
-                    <span className="coupon-usage">
+                  <p className={styles.couponDescription}>{coupon.description}</p>
+                  <div className={styles.couponFooter}>
+                    <span className={styles.couponUsage}>
                       {coupon.currentUses}/{coupon.maxUses} usos
                     </span>
                     <button
-                      className="quick-apply-btn"
+                      className={styles.quickApplyBtn}
                       onClick={() => handleQuickApply(coupon.code)}
                       disabled={appliedCoupon !== null}
                     >
@@ -120,23 +127,23 @@ export default function CouponSection({ cartTotal }) {
       </div>
 
       {appliedCoupon && (
-        <div className="applied-coupon">
-          <div className="applied-header">
-            <span className="applied-label">Cupom Aplicado:</span>
-            <button className="remove-coupon-btn" onClick={handleRemoveCoupon}>
+        <div className={styles.appliedCoupon}>
+          <div className={styles.appliedHeader}>
+            <span className={styles.appliedLabel}>Cupom Aplicado:</span>
+            <button className={styles.removeCouponBtn} onClick={handleRemoveCoupon}>
               ✕
             </button>
           </div>
-          <p className="applied-code">{appliedCoupon.code}</p>
-          <p className="applied-description">{appliedCoupon.description}</p>
-          <div className="discount-display">
-            <span className="discount-label">Desconto:</span>
+          <p className={styles.appliedCode}>{appliedCoupon.code}</p>
+          <p className={styles.appliedDescription}>{appliedCoupon.description}</p>
+          <div className={styles.discountDisplay}>
+            <span className={styles.discountLabel}>Desconto:</span>
             {appliedCoupon.type === 'percentage' ? (
-              <span className="discount-value">
+              <span className={styles.discountValue}>
                 -{appliedCoupon.discount}% (-R$ {discount.toFixed(2)})
               </span>
             ) : (
-              <span className="discount-value">-R$ {discount.toFixed(2)}</span>
+              <span className={styles.discountValue}>-R$ {discount.toFixed(2)}</span>
             )}
           </div>
         </div>

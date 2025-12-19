@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { useFreight } from '../context/useFreight';
-import './FreightSelector.scss';
+import { useState, useEffect, useMemo } from 'react';
+import useStore from '../store/useStore';
+import styles from './FreightSelector.module.scss';
 
 export default function FreightSelector({ zipcode, cartTotal, onSelect }) {
-  const { calculateFreightOptions, selectedFreight, selectFreight } = useFreight();
+  const { calculateFreightOptions, selectedFreight, selectFreight } = useStore();
   const [freightOptions, setFreightOptions] = useState([]);
   const [error, setError] = useState('');
 
@@ -39,17 +39,19 @@ export default function FreightSelector({ zipcode, cartTotal, onSelect }) {
   };
 
   return (
-    <div className="freight-selector">
+    <div className={styles.freightSelector}>
       <h3>💌 Opções de Frete</h3>
 
-      {error && <p className="freight-error">⚠️ {error}</p>}
+      {error && <p className={styles.freightError}>⚠️ {error}</p>}
 
       {freightOptions.length > 0 && (
-        <div className="freight-options">
+        <div className={styles.freightOptions}>
           {freightOptions.map((freight) => (
             <label
               key={freight.id}
-              className={`freight-option ${selectedFreight?.id === freight.id ? 'selected' : ''}`}
+              className={`${styles.freightOption} ${
+                selectedFreight?.id === freight.id ? styles.selected : ''
+              }`}
             >
               <input
                 type="radio"
@@ -58,14 +60,14 @@ export default function FreightSelector({ zipcode, cartTotal, onSelect }) {
                 checked={selectedFreight?.id === freight.id}
                 onChange={() => handleSelectFreight(freight)}
               />
-              <div className="freight-info">
-                <div className="freight-header">
-                  <span className="freight-name">{freight.name}</span>
-                  <span className="freight-price">R$ {freight.price.toFixed(2)}</span>
+              <div className={styles.freightInfo}>
+                <div className={styles.freightHeader}>
+                  <span className={styles.freightName}>{freight.name}</span>
+                  <span className={styles.freightPrice}>R$ {freight.price.toFixed(2)}</span>
                 </div>
-                <div className="freight-details">
-                  <span className="freight-days">📅 {freight.days} dias úteis</span>
-                  <span className="freight-region">📍 {freight.region}</span>
+                <div className={styles.freightDetails}>
+                  <span className={styles.freightDays}>📅 {freight.days} dias úteis</span>
+                  <span className={styles.freightRegion}>📍 {freight.region}</span>
                 </div>
               </div>
             </label>
@@ -74,7 +76,7 @@ export default function FreightSelector({ zipcode, cartTotal, onSelect }) {
       )}
 
       {freightOptions.length === 0 && !error && (
-        <p className="freight-empty">Digite um CEP válido para ver as opções</p>
+        <p className={styles.freightEmpty}>Digite um CEP válido para ver as opções</p>
       )}
     </div>
   );

@@ -1,10 +1,9 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useWishlist } from "../context/useWishlist";
-import "./ProductCard.scss";
+import useStore from '../store/useStore';
+import styles from "./ProductCard.module.scss";
 
 export default function ProductCard({ product, onAddToCart }) {
-  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useStore();
   const navigate = useNavigate();
   const isFavorite = isInWishlist(product.id);
 
@@ -21,10 +20,10 @@ export default function ProductCard({ product, onAddToCart }) {
   };
 
   return (
-    <div className="product-card">
-      <div className="product-card-header">
+    <div className={styles.productCard}>
+      <div className={styles.productCardHeader}>
         <button
-          className={`favorite-btn ${isFavorite ? "active" : ""}`}
+          className={`${styles.favoriteBtn} ${isFavorite ? styles.active : ""}`}
           onClick={handleToggleFavorite}
           title={
             isFavorite ? "Remover dos favoritos" : "Adicionar aos favoritos"
@@ -35,34 +34,34 @@ export default function ProductCard({ product, onAddToCart }) {
       </div>
 
       <div
-        className="product-image"
+        className={styles.productImage}
         onClick={handleViewDetails}
         style={{ cursor: "pointer" }}
       >
         <img src={product.image} alt={product.name} />
       </div>
 
-      <div className="product-info">
+      <div className={styles.productInfo}>
         <h3
-          className="product-name"
+          className={styles.productName}
           onClick={handleViewDetails}
           style={{ cursor: "pointer" }}
         >
           {product.name}
         </h3>
 
-        <p className="product-description">{product.description}</p>
+        <p className={styles.productDescription}>{product.description}</p>
 
         {product.rating && (
-          <div className="product-rating">
+          <div className={styles.productRating}>
             <span>⭐ {product.rating.toFixed(1)}</span>
           </div>
         )}
 
-        <div className="product-footer">
-          <span className="product-price">R$ {product.price.toFixed(2)}</span>
+        <div className={styles.productFooter}>
+          <span className={styles.productPrice}>R$ {product.price.toFixed(2)}</span>
           <button
-            className="add-to-cart-btn"
+            className={styles.addToCartBtn}
             onClick={() => onAddToCart(product)}
           >
             🛒 Adicionar

@@ -1,6 +1,5 @@
-import React from 'react';
-import { useProduct } from '../context/useProduct';
-import './FilterPanel.scss';
+import useStore from '../store/useStore';
+import styles from './FilterPanel.module.scss';
 
 export default function FilterPanel() {
   const {
@@ -11,8 +10,17 @@ export default function FilterPanel() {
     sortBy,
     setSortBy,
     setSearchQuery,
-    getCategories: categories,
-  } = useProduct();
+    categories,
+  } = useStore(state => ({
+    selectedCategory: state.selectedCategory,
+    setSelectedCategory: state.setSelectedCategory,
+    priceRange: state.priceRange,
+    setPriceRange: state.setPriceRange,
+    sortBy: state.sortBy,
+    setSortBy: state.setSortBy,
+    setSearchQuery: state.setSearchQuery,
+    categories: state.categories(),
+  }));
 
   const categoryLabels = {
     all: 'Todos os Produtos',
@@ -22,14 +30,14 @@ export default function FilterPanel() {
   };
 
   return (
-    <aside className="filter-panel">
-      <div className="filters-container">
+    <aside className={styles.filterPanel}>
+      <div className={styles.filtersContainer}>
         {/* Filtro de Categoria */}
-        <div className="filter-section">
+        <div className={styles.filterSection}>
           <h3>Categoria</h3>
-          <div className="category-list">
+          <div className={styles.categoryList}>
             {categories.map(category => (
-              <label key={category} className="category-item">
+              <label key={category} className={styles.categoryItem}>
                 <input
                   type="radio"
                   name="category"
@@ -44,15 +52,15 @@ export default function FilterPanel() {
         </div>
 
         {/* Filtro de Preço */}
-        <div className="filter-section">
+        <div className={styles.filterSection}>
           <h3>Preço</h3>
-          <div className="price-inputs">
-            <div className="price-input-group">
+          <div className={styles.priceInputs}>
+            <div className={styles.priceInputGroup}>
               <label>De:</label>
               <input
                 type="number"
                 min="0"
-                max="1000"
+                max="3000"
                 value={priceRange.min}
                 onChange={(e) =>
                   setPriceRange({
@@ -60,10 +68,10 @@ export default function FilterPanel() {
                     min: parseInt(e.target.value) || 0,
                   })
                 }
-                className="price-input"
+                className={styles.priceInput}
               />
             </div>
-            <div className="price-input-group">
+            <div className={styles.priceInputGroup}>
               <label>Até:</label>
               <input
                 type="number"
@@ -73,14 +81,14 @@ export default function FilterPanel() {
                 onChange={(e) =>
                   setPriceRange({
                     ...priceRange,
-                    max: parseInt(e.target.value) || 1000,
+                    max: parseInt(e.target.value) || 3000,
                   })
                 }
-                className="price-input"
+                className={styles.priceInput}
               />
             </div>
           </div>
-          <div className="price-range-slider">
+          <div className={styles.priceRangeSlider}>
             <input
               type="range"
               min="0"
@@ -92,21 +100,21 @@ export default function FilterPanel() {
                   max: parseInt(e.target.value),
                 })
               }
-              className="range-slider"
+              className={styles.rangeSlider}
             />
           </div>
-          <div className="price-display">
+          <div className={styles.priceDisplay}>
             R$ {priceRange.min} - R$ {priceRange.max}
           </div>
         </div>
 
         {/* Filtro de Ordenação */}
-        <div className="filter-section">
+        <div className={styles.filterSection}>
           <h3>Ordenar por</h3>
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="sort-select"
+            className={styles.sortSelect}
           >
             <option value="newest">Mais Recentes</option>
             <option value="price-asc">Menor Preço</option>
@@ -117,11 +125,11 @@ export default function FilterPanel() {
 
         {/* Botão Limpar Filtros */}
         <button
-          className="clear-filters-btn"
+          className={styles.clearFiltersBtn}
           onClick={() => {
             setSearchQuery('');
             setSelectedCategory('all');
-            setPriceRange({ min: 0, max: 1000 });
+            setPriceRange({ min: 0, max: 3000 });
             setSortBy('newest');
           }}
         >

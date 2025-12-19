@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useCart } from "../context/useCart";
-import { useNotification } from "../context/useNotification";
 import ReviewSection from "../components/ReviewSection";
-import db from "../../db.json";
-import "./ProductPage.scss";
+import useStore from "../store/useStore";
+import styles from "./ProductPage.module.scss";
 
 export default function ProductPage() {
   const { productId } = useParams();
-  const { addToCart } = useCart();
-  const { addNotification } = useNotification();
+  const { addToCart, addNotification, getProductById } = useStore((state) => ({
+    addToCart: state.addToCart,
+    addNotification: state.addNotification,
+    getProductById: state.getProductById,
+  }));
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -17,15 +18,14 @@ export default function ProductPage() {
 
   useEffect(() => {
     setLoading(true);
-    // Simulating an API call
-    const foundProduct = db.products.find((p) => p.id === parseInt(productId));
+    const foundProduct = getProductById(parseInt(productId));
     setProduct(foundProduct);
     setLoading(false);
-  }, [productId]);
+  }, [productId, getProductById]);
 
   if (loading) {
     return (
-      <div className="product-page-container">
+      <div className={styles.productPageContainer}>
         <p>Carregando...</p>
       </div>
     );
@@ -33,7 +33,7 @@ export default function ProductPage() {
 
   if (!product) {
     return (
-      <div className="product-page-container">
+      <div className={styles.productPageContainer}>
         <h2>Oops!</h2>
         <p>Produto não encontrado.</p>
       </div>
@@ -65,39 +65,39 @@ export default function ProductPage() {
   };
 
   return (
-    <div className="product-page-container">
-      <div className="product-detail-container">
+    <div className={styles.productPageContainer}>
+      <div className={styles.productDetailContainer}>
         {/* Imagem */}
-        <div className="detail-image-section">
-          <img src={product.image} alt={product.name} className="detail-image" />
-          <div className="stock-badge">
+        <div className={styles.detailImageSection}>
+          <img src={product.image} alt={product.name} className={styles.detailImage} />
+          <div className={styles.stockBadge}>
             {product.inStock ? "Em Estoque" : "Fora de Estoque"}
           </div>
         </div>
 
         {/* Informações */}
-        <div className="detail-info-section">
-          <h1 className="detail-name">{product.name}</h1>
+        <div className={styles.detailInfoSection}>
+          <h1 className={styles.detailName}>{product.name}</h1>
 
           {/* Rating */}
-          <div className="detail-rating">
-            <span className="stars">⭐ {product.rating.toFixed(1)}</span>
-            <span className="reviews">({product.reviews} avaliações)</span>
+          <div className={styles.detailRating}>
+            <span className={styles.stars}>⭐ {product.rating.toFixed(1)}</span>
+            <span className={styles.reviews}>({product.reviews} avaliações)</span>
           </div>
 
           {/* Preço */}
-          <div className="detail-price">
-            <span className="price">R$ {product.price.toFixed(2)}</span>
-            <span className="original-price">
+          <div className={styles.detailPrice}>
+            <span className={styles.price}>R$ {product.price.toFixed(2)}</span>
+            <span className={styles.originalPrice}>
               R$ {(product.price * 1.2).toFixed(2)}
             </span>
           </div>
 
           {/* Descrição */}
-          <p className="detail-description">{product.description}</p>
+          <p className={styles.detailDescription}>{product.description}</p>
 
           {/* Features */}
-          <div className="detail-features">
+          <div className={styles.detailFeatures}>
             <h3>Principais Características</h3>
             <ul>
               {product.features.map((feature, idx) => (
@@ -107,34 +107,34 @@ export default function ProductPage() {
           </div>
 
           {/* Quantidade e Carrinho */}
-          <div className="detail-actions">
-            <div className="quantity-selector">
-              <button onClick={decreaseQuantity} className="qty-btn">−</button>
-              <span className="qty-display">{quantity}</span>
-              <button onClick={increaseQuantity} className="qty-btn">+</button>
-              <span className="stock-info">({product.stock} disponíveis)</span>
+          <div className={styles.detailActions}>
+            <div className={styles.quantitySelector}>
+              <button onClick={decreaseQuantity} className={styles.qtyBtn}>−</button>
+              <span className={styles.qtyDisplay}>{quantity}</span>
+              <button onClick={increaseQuantity} className={styles.qtyBtn}>+</button>
+              <span className={styles.stockInfo}>({product.stock} disponíveis)</span>
             </div>
 
             <button
               onClick={handleAddToCart}
               disabled={!product.inStock}
-              className="add-to-cart-large"
+              className={styles.addToCartLarge}
             >
               🛒 Adicionar ao Carrinho
             </button>
           </div>
 
           {/* Especificações */}
-          <div className="detail-specs">
+          <div className={styles.detailSpecs}>
             <h3>Especificações</h3>
-            <table className="specs-table">
+            <table className={styles.specsTable}>
               <tbody>
                 {Object.entries(product.specifications).map(([key, value]) => (
                   <tr key={key}>
-                    <td className="spec-label">
+                    <td className={styles.specLabel}>
                       {key.replace(/([A-Z])/g, " $1").trim()}
                     </td>
-                    <td className="spec-value">{value}</td>
+                    <td className={styles.specValue}>{value}</td>
                   </tr>
                 ))}
               </tbody>

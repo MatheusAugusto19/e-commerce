@@ -1,15 +1,17 @@
-import React from "react";
 import ProductCard from "../components/ProductCard";
 import FilterPanel from "../components/FilterPanel";
 import Pagination from "../components/Pagination";
-import { useCart } from "../context/useCart";
-import { useNotification } from "../context/useNotification";
-import { useProduct } from "../context/useProduct";
+import useStore from "../store/useStore";
+import styles from "./HomePage.module.scss";
 
 export default function HomePage() {
-  const { addToCart } = useCart();
-  const { addNotification } = useNotification();
-  const { paginatedProducts, filteredProducts } = useProduct();
+  const { addToCart, addNotification, paginatedProducts, totalItems } = useStore(state => ({
+    addToCart: state.addToCart,
+    addNotification: state.addNotification,
+    paginatedProducts: state.pagination().paginatedProducts,
+    totalItems: state.pagination().totalItems
+  }));
+  const allFilteredProducts = useStore(state => state.filteredProducts());
 
   const products = paginatedProducts;
 
@@ -23,26 +25,26 @@ export default function HomePage() {
   };
 
   return (
-    <main className="home-page">
-      <section className="hero">
+    <main className={styles.homePage}>
+      <section className={styles.hero}>
         <h2>Bem-vindo à nossa loja online!</h2>
         <p>Encontre os melhores produtos de tecnologia</p>
       </section>
 
-      <section className="products-section">
-        <div className="products-container">
+      <section className={styles.productsSection}>
+        <div className={styles.productsContainer}>
           <FilterPanel />
-          <div className="products-wrapper">
-            <h2 className="section-title">
-              Produtos ({filteredProducts.length} encontrados)
+          <div className={styles.productsWrapper}>
+            <h2 className={styles.sectionTitle}>
+              Produtos ({allFilteredProducts.length} encontrados)
             </h2>
-            {filteredProducts.length === 0 ? (
-              <div className="no-products">
+            {allFilteredProducts.length === 0 ? (
+              <div className={styles.noProducts}>
                 <p>😢 Nenhum produto encontrado com os filtros selecionados</p>
               </div>
             ) : (
               <>
-                <div className="products-grid">
+                <div className={styles.productsGrid}>
                   {products.map((product) => (
                     <ProductCard
                       key={product.id}
@@ -51,7 +53,7 @@ export default function HomePage() {
                     />
                   ))}
                 </div>
-                <Pagination totalItems={filteredProducts.length} />
+                <Pagination totalItems={totalItems} />
               </>
             )}
           </div>

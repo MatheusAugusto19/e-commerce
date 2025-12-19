@@ -1,15 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { useProduct } from '../context/useProduct';
-import './SearchBar.scss';
+import { useState, useEffect } from 'react';
+import useStore from '../store/useStore';
+import styles from './SearchBar.module.scss';
 
 export default function SearchBar({ onSearch }) {
   const {
-    allProducts,
     setSearchQuery,
     suggestions,
     generateSuggestions,
     getQuickSuggestions,
-  } = useProduct();
+  } = useStore(state => ({
+    setSearchQuery: state.setSearchQuery,
+    suggestions: state.suggestions,
+    generateSuggestions: state.generateSuggestions,
+    getQuickSuggestions: state.getQuickSuggestions,
+  }));
   const [query, setQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
 
@@ -17,12 +21,12 @@ export default function SearchBar({ onSearch }) {
   useEffect(() => {
     const timer = setTimeout(() => {
       if (query.trim()) {
-        generateSuggestions(query, allProducts);
+        generateSuggestions(query);
       }
     }, 200);
 
     return () => clearTimeout(timer);
-  }, [query, generateSuggestions, allProducts]);
+  }, [query, generateSuggestions]);
 
   const handleInputChange = (e) => {
     const value = e.target.value;
@@ -64,38 +68,38 @@ export default function SearchBar({ onSearch }) {
   const quickSuggestions = getQuickSuggestions();
 
   return (
-    <div className="search-bar-container">
-      <div className="search-bar">
+    <div className={styles.searchBarContainer}>
+      <div className={styles.searchBar}>
         <input
           type="text"
-          className="search-input"
+          className={styles.searchInput}
           placeholder="🔍 Buscar produtos..."
           value={query}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           onFocus={() => query && setShowSuggestions(true)}
         />
-        <button className="search-btn" onClick={() => handleSearch()}>
+        <button className={styles.searchBtn} onClick={() => handleSearch()}>
           🔍
         </button>
       </div>
 
       {showSuggestions && suggestions.length > 0 && (
-        <div className="suggestions-dropdown">
+        <div className={styles.suggestionsDropdown}>
           {suggestions.map((suggestion, idx) => (
             <div
               key={idx}
-              className={`suggestion-item suggestion-${suggestion.type}`}
+              className={`${styles.suggestionItem} ${styles[`suggestion-${suggestion.type}`]}`}
               onClick={() => handleSuggestionClick(suggestion)}
             >
-              <span className="suggestion-icon">
+              <span className={styles.suggestionIcon}>
                 {suggestion.type === 'product' && '📦'}
                 {suggestion.type === 'category' && '🏷️'}
                 {suggestion.type === 'history' && '⏱️'}
               </span>
-              <span className="suggestion-text">{suggestion.value}</span>
+              <span className={styles.suggestionText}>{suggestion.value}</span>
               {suggestion.type === 'product' && (
-                <span className="suggestion-meta">Produto</span>
+                <span className={styles.suggestionMeta}>Produto</span>
               )}
             </div>
           ))}
@@ -103,22 +107,22 @@ export default function SearchBar({ onSearch }) {
       )}
 
       {query && suggestions.length === 0 && (
-        <div className="suggestions-dropdown">
-          <div className="no-suggestions">Nenhuma sugestão encontrada</div>
+        <div className={styles.suggestionsDropdown}>
+          <div className={styles.noSuggestions}>Nenhuma sugestão encontrada</div>
         </div>
       )}
 
       {!query && quickSuggestions.length > 0 && showSuggestions && (
-        <div className="suggestions-dropdown">
-          <div className="quick-title">⏱️ Buscas Recentes</div>
+        <div className={styles.suggestionsDropdown}>
+          <div className={styles.quickTitle}>⏱️ Buscas Recentes</div>
           {quickSuggestions.map((item, idx) => (
             <div
               key={idx}
-              className="suggestion-item suggestion-history"
+              className={`${styles.suggestionItem} ${styles.suggestionHistory}`}
               onClick={() => handleSearch(item.query)}
             >
-              <span className="suggestion-icon">⏱️</span>
-              <span className="suggestion-text">{item.query}</span>
+              <span className={styles.suggestionIcon}>⏱️</span>
+              <span className={styles.suggestionText}>{item.query}</span>
             </div>
           ))}
         </div>
