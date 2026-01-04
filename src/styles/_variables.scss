@@ -1,0 +1,39 @@
+// Cores
+$color-primary: #007BFF;    // Azul Vibrante
+$color-secondary: #6c757d; // Cinza Neutro
+$color-background: #f8f9fa; // Cinza Muito Claro
+$color-text: #212529;      // Preto Suave
+$color-text-light: #6c757d; // Cinza para textos secundários
+$color-border: #dee2e6;    // Cinza Claro para Bordas
+$color-success: #4caf50;
+$color-error: #f44336;
+
+// Espaçamentos
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+
+// Breakpoints
+$breakpoint-xs: 480px;    // Extra small devices (phones)
+$breakpoint-sm: 640px;    // Small devices (large phones)
+$breakpoint-md: 768px;    // Medium devices (tablets)
+$breakpoint-lg: 1024px;   // Large devices (desktops)
+$breakpoint-xl: 1280px;   // Extra large devices (wide desktops)
+
+// Legacy breakpoints (kept for compatibility)
+$breakpoint-mobile: 768px;
+$breakpoint-tablet: 1024px;
+
+// Tipografia
+$font-size-base: 1rem;
+$font-size-sm: 0.85rem;
+$font-size-lg: 1.2rem;
+$font-size-xl: 1.5rem;
+$font-size-2xl: 2rem;
+
+// Shadows
+$shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+$shadow-md: 0 2px 8px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);

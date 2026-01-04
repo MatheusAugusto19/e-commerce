@@ -1,0 +1,147 @@
+@import "../styles/variables";
+
+.freight-selector {
+  background: white;
+  border-radius: 8px;
+  padding: $spacing-md;
+  box-shadow: $shadow-md;
+  margin: $spacing-md 0;
+
+  h3 {
+    margin: 0 0 $spacing-sm 0;
+    font-size: 1.1rem;
+    color: #000;
+  }
+}
+
+.freight-loading {
+  text-align: center;
+  color: $color-text-light;
+  font-style: italic;
+  padding: $spacing-sm;
+}
+
+.freight-error {
+  background-color: rgba(231, 76, 60, 0.1);
+  border-left: 4px solid #e74c3c;
+  color: #e74c3c;
+  padding: $spacing-sm;
+  border-radius: 4px;
+  margin-bottom: $spacing-sm;
+}
+
+.freight-empty {
+  text-align: center;
+  color: $color-text-light;
+  padding: $spacing-md;
+  font-style: italic;
+}
+
+.freight-options {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.freight-option {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-sm;
+  padding: $spacing-sm;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: white;
+
+  &:hover {
+    border-color: $color-primary;
+    background-color: #fffaf0;
+  }
+
+  &.selected {
+    border-color: $color-primary;
+    background-color: #fffaf0;
+    box-shadow: 0 0 0 3px rgba(255, 255, 0, 0.2);
+  }
+
+  input[type="radio"] {
+    margin-top: 4px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: $color-primary;
+  }
+}
+
+.freight-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.freight-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.freight-name {
+  font-weight: bold;
+  color: #000;
+  font-size: 0.95rem;
+}
+
+.freight-price {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: $color-primary;
+  min-width: 100px;
+  text-align: right;
+}
+
+.freight-details {
+  display: flex;
+  gap: $spacing-md;
+  font-size: 0.85rem;
+  color: $color-text-light;
+}
+
+.freight-days,
+.freight-region {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+// Responsivo
+@media (max-width: $breakpoint-mobile) {
+  .freight-selector {
+    padding: $spacing-sm;
+  }
+
+  .freight-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .freight-price {
+    text-align: left;
+    min-width: auto;
+  }
+
+  .freight-details {
+    flex-direction: column;
+    gap: $spacing-xs;
+  }
+
+  .freight-option {
+    padding: $spacing-xs;
+
+    input[type="radio"] {
+      margin-top: 2px;
+    }
+  }
+}
